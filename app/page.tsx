@@ -1,8 +1,12 @@
+import Image from "next/image";
 import Link from "next/link";
 import Header from "@/components/Header";
 import AppCTA from "@/components/AppCTA";
 import FeatureCards from "@/components/FeatureCards";
 import Footer from "@/components/Footer";
+
+const LOGO_URL =
+  "https://dhuidtxkthlvkqyuxbkw.supabase.co/storage/v1/object/public/BibleYes/logos/ChatGPT%20Image%20Apr%2010,%202026,%2003_24_13%20PM.png";
 
 export default function HomePage() {
   return (
@@ -13,6 +17,20 @@ export default function HomePage() {
         {/* Hero */}
         <section className="bg-white py-20 px-4">
           <div className="max-w-3xl mx-auto text-center">
+            {/* Brand icon */}
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <Image
+                src={LOGO_URL}
+                alt="BibleYes"
+                width={56}
+                height={56}
+                className="rounded-2xl shadow-md"
+              />
+              <span className="text-2xl font-bold text-gray-900 tracking-tight">
+                BibleYes
+              </span>
+            </div>
+
             <p className="text-xs font-bold uppercase tracking-widest text-blue-600 mb-4">
               World English Bible · Public Domain
             </p>
