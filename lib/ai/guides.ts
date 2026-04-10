@@ -8,7 +8,12 @@ export type Guide = {
   title: string;
   specialty: string;
   description: string;
-  /** Seed for DiceBear adventurer avatar */
+  /**
+   * Direct URL to the guide's avatar image (Supabase or CDN).
+   * If null, falls back to a DiceBear avatar using `avatarSeed`.
+   */
+  avatarUrl: string | null;
+  /** Fallback seed for DiceBear when avatarUrl is null */
   avatarSeed: string;
   /** Tailwind color token used for accent rings / badges */
   accentColor: string;
@@ -21,16 +26,17 @@ export type Guide = {
 export const GUIDES: Guide[] = [
   {
     id: "teacher",
-    name: "Grace",
+    name: "Maya",
     title: "Bible Teacher",
     specialty: "Beginner-friendly explanations",
     description:
       "Explains every verse clearly and simply — perfect if you're new to the Bible or want refreshingly plain answers.",
-    avatarSeed: "Grace",
+    avatarUrl: "https://dhuidtxkthlvkqyuxbkw.supabase.co/storage/v1/object/public/BibleYes/people/Maya.jpg",
+    avatarSeed: "Maya",
     accentColor: "emerald",
     accentHex: "#059669",
-    tonePrompt: `GUIDE PERSONA — Bible Teacher (Grace):
-You are Grace, a warm and patient Bible teacher. Your role is to make Scripture accessible to everyone, especially beginners.
+    tonePrompt: `GUIDE PERSONA — Bible Teacher (Maya):
+You are Maya, a warm and patient Bible teacher. Your role is to make Scripture accessible to everyone, especially beginners.
 - Use clear, simple language — avoid unnecessary jargon
 - Break down complex ideas into everyday terms
 - Always explain the meaning before adding context
@@ -44,6 +50,7 @@ You are Grace, a warm and patient Bible teacher. Your role is to make Scripture 
     specialty: "Theology & deep context",
     description:
       "Provides deeper theological context, historical background, and cross-references for serious Bible study.",
+    avatarUrl: null,
     avatarSeed: "Nathan",
     accentColor: "blue",
     accentHex: "#2563eb",
@@ -62,6 +69,7 @@ You are Nathan, a thoughtful Bible commentator with a love for theology and chur
     specialty: "Hebrew & Greek word meanings",
     description:
       "Unpacks original Hebrew and Greek words to reveal the precise meaning Scripture intended.",
+    avatarUrl: null,
     avatarSeed: "Lydia",
     accentColor: "violet",
     accentHex: "#7c3aed",
@@ -80,6 +88,7 @@ You are Lydia, a careful word-study guide who loves original languages.
     specialty: "Daily life application & prayer",
     description:
       "Brings Scripture to life with warm, practical encouragement — ideal for daily devotions and personal reflection.",
+    avatarUrl: null,
     avatarSeed: "Elijah",
     accentColor: "amber",
     accentHex: "#d97706",
@@ -99,7 +108,13 @@ export function getGuide(id: GuideId | null | undefined): Guide {
   return GUIDES.find((g) => g.id === id) ?? GUIDES[0];
 }
 
-/** Avatar URL from DiceBear (illustrated cartoon-style faces — clearly AI-generated) */
-export function guideAvatarUrl(seed: string): string {
-  return `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(seed)}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`;
+/** Returns the avatar URL for a guide — uses the direct URL if set, otherwise falls back to DiceBear. */
+export function guideAvatarUrl(guide: Guide): string;
+export function guideAvatarUrl(seed: string): string;
+export function guideAvatarUrl(guideOrSeed: Guide | string): string {
+  if (typeof guideOrSeed === "string") {
+    return `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(guideOrSeed)}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`;
+  }
+  if (guideOrSeed.avatarUrl) return guideOrSeed.avatarUrl;
+  return `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(guideOrSeed.avatarSeed)}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`;
 }

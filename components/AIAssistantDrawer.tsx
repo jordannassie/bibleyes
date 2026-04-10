@@ -174,7 +174,7 @@ export default function AIAssistantDrawer({
                   >
                     <div className="w-9 h-9 rounded-xl overflow-hidden flex-shrink-0">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={guideAvatarUrl(g.avatarSeed)} alt="" className="w-full h-full object-cover" />
+                      <img src={guideAvatarUrl(g)} alt="" className="w-full h-full object-cover" />
                     </div>
                     <div className="min-w-0">
                       <p className="text-xs font-semibold text-gray-900 truncate">{g.name}</p>
@@ -203,7 +203,7 @@ export default function AIAssistantDrawer({
             <div className="w-9 h-9 rounded-xl overflow-hidden flex-shrink-0 ring-2 ring-gray-100 group-hover:ring-gray-300 transition-all">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={guideAvatarUrl(selectedGuide.avatarSeed)}
+                src={guideAvatarUrl(selectedGuide)}
                 alt={`${selectedGuide.name} guide`}
                 className="w-full h-full object-cover"
               />
@@ -242,7 +242,7 @@ export default function AIAssistantDrawer({
               <div className="w-16 h-16 rounded-2xl overflow-hidden mb-4 ring-2 ring-gray-100 shadow-md">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={guideAvatarUrl(selectedGuide.avatarSeed)}
+                  src={guideAvatarUrl(selectedGuide)}
                   alt={selectedGuide.name}
                   className="w-full h-full object-cover"
                 />

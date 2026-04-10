@@ -56,7 +56,7 @@ function GuideCard({ guide, isSelected, onSelect }: { guide: Guide; isSelected: 
           <div className={`w-14 h-14 rounded-2xl overflow-hidden flex-shrink-0 ring-2 ${isSelected ? ring : "ring-gray-100 dark:ring-[#2a2a2a]"}`}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={guideAvatarUrl(guide.avatarSeed)}
+              src={guideAvatarUrl(guide)}
               alt={`${guide.name} AI guide avatar`}
               width={56}
               height={56}
