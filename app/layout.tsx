@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Lora } from "next/font/google";
 import "./globals.css";
+import MobileNav from "@/components/MobileNav";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,8 +28,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${lora.variable}`}>
-      <body className="font-sans antialiased bg-white text-gray-900">
+      <body className="font-sans antialiased bg-white text-gray-900 pb-16 sm:pb-0">
         {children}
+        <MobileNav />
       </body>
     </html>
   );

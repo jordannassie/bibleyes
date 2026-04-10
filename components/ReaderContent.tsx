@@ -28,6 +28,7 @@ export default function ReaderContent({ data }: Props) {
                 verse={verse}
                 translationCode={data.translation}
                 bookSlug={data.book.slug}
+                bookName={data.book.name}
                 chapter={data.chapter}
               />
             ))}
