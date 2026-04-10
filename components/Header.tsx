@@ -1,8 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import SearchBar from "./SearchBar";
+
+const LOGO_URL =
+  "https://dhuidtxkthlvkqyuxbkw.supabase.co/storage/v1/object/public/BibleYes/logos/ChatGPT%20Image%20Apr%2010,%202026,%2003_24_13%20PM.png";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -14,9 +18,18 @@ export default function Header() {
           {/* Logo */}
           <Link
             href="/"
-            className="flex-shrink-0 text-xl font-bold text-gray-900 tracking-tight"
+            className="flex-shrink-0 flex items-center gap-2"
           >
-            BibleYes
+            <Image
+              src={LOGO_URL}
+              alt="BibleYes logo"
+              width={32}
+              height={32}
+              className="rounded-lg"
+            />
+            <span className="text-xl font-bold text-gray-900 tracking-tight">
+              BibleYes
+            </span>
           </Link>
 
           {/* Nav links */}
