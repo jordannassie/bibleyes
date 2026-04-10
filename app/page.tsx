@@ -74,29 +74,12 @@ export default function HomePage() {
         <section className="py-24 px-4" style={{ background: "linear-gradient(135deg, #0f2a5e 0%, #1a3a7c 40%, #0d1f4a 100%)" }}>
           <div className="max-w-3xl mx-auto text-center">
 
-            {/* Big chatbot icon */}
+            {/* Chat icon */}
             <div className="flex justify-center mb-8">
-              <div className="w-24 h-24 rounded-3xl bg-white/15 border border-white/20 flex items-center justify-center shadow-2xl">
-                {/* Robot / chatbot face */}
-                <svg className="w-14 h-14 text-white" viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
-                  {/* Antenna */}
-                  <line x1="32" y1="6" x2="32" y2="14" strokeWidth="2.5"/>
-                  <circle cx="32" cy="5" r="2.5" fill="currentColor" stroke="none"/>
-                  {/* Head */}
-                  <rect x="10" y="14" width="44" height="30" rx="8" strokeWidth="2.5"/>
-                  {/* Eyes */}
-                  <circle cx="22" cy="27" r="4" fill="currentColor" stroke="none"/>
-                  <circle cx="42" cy="27" r="4" fill="currentColor" stroke="none"/>
-                  {/* Eye shine */}
-                  <circle cx="24" cy="25.5" r="1.2" fill="white" stroke="none"/>
-                  <circle cx="44" cy="25.5" r="1.2" fill="white" stroke="none"/>
-                  {/* Mouth */}
-                  <path d="M22 35 Q32 41 42 35" strokeWidth="2.5" fill="none"/>
-                  {/* Neck */}
-                  <line x1="25" y1="44" x2="25" y2="50" strokeWidth="2.5"/>
-                  <line x1="39" y1="44" x2="39" y2="50" strokeWidth="2.5"/>
-                  {/* Body base */}
-                  <rect x="18" y="50" width="28" height="8" rx="4" strokeWidth="2.5"/>
+              <div className="w-20 h-20 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center shadow-2xl">
+                <svg className="w-10 h-10 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6}
+                    d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                 </svg>
               </div>
             </div>
