@@ -13,7 +13,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="border-t border-gray-100 bg-white">
+    <footer className="border-t border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-2">
           <Image
@@ -23,14 +23,14 @@ export default function Footer() {
             height={24}
             className="rounded-md"
           />
-          <p className="text-sm font-semibold text-gray-900">BibleYes</p>
+          <p className="text-sm font-semibold text-gray-900 dark:text-white">BibleYes</p>
         </div>
         <nav className="flex flex-wrap justify-center gap-x-6 gap-y-1">
           {links.map((l) => (
             <a
               key={l.label}
               href={l.href}
-              className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
+              className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
             >
               {l.label}
             </a>

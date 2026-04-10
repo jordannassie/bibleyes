@@ -4,22 +4,21 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import SearchBar from "./SearchBar";
+import { useTheme } from "./ThemeProvider";
 
 const LOGO_URL =
   "https://dhuidtxkthlvkqyuxbkw.supabase.co/storage/v1/object/public/BibleYes/logos/ChatGPT%20Image%20Apr%2010,%202026,%2003_24_13%20PM.png";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { theme, toggle } = useTheme();
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
+    <header className="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center h-14 gap-4">
           {/* Logo */}
-          <Link
-            href="/"
-            className="flex-shrink-0 flex items-center gap-2"
-          >
+          <Link href="/" className="flex-shrink-0 flex items-center gap-2">
             <Image
               src={LOGO_URL}
               alt="BibleYes logo"
@@ -27,7 +26,7 @@ export default function Header() {
               height={32}
               className="rounded-lg"
             />
-            <span className="text-xl font-bold text-gray-900 tracking-tight">
+            <span className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
               BibleYes
             </span>
           </Link>
@@ -42,26 +41,24 @@ export default function Header() {
               <Link
                 key={item.label}
                 href={item.href}
-                className="px-3 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
+                className="px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors"
               >
                 {item.label}
               </Link>
             ))}
           </nav>
 
-          {/* Search bar — wired to /search */}
+          {/* Search bar */}
           <div className="flex-1 max-w-xl mx-auto hidden sm:block">
             <SearchBar />
           </div>
 
-          {/* Right */}
+          {/* Right actions */}
           <div className="flex items-center gap-1 ml-auto flex-shrink-0">
-            {/* AI toggle button */}
+            {/* AI toggle */}
             <button
-              onClick={() =>
-                window.dispatchEvent(new CustomEvent("bibleyes:toggle-ai"))
-              }
-              className="inline-flex items-center gap-2 bg-gray-900 hover:bg-gray-700 text-white px-4 py-2 rounded-full text-sm font-semibold transition-colors shadow-sm"
+              onClick={() => window.dispatchEvent(new CustomEvent("bibleyes:toggle-ai"))}
+              className="inline-flex items-center gap-2 bg-gray-900 dark:bg-white hover:bg-gray-700 dark:hover:bg-gray-100 text-white dark:text-gray-900 px-4 py-2 rounded-full text-sm font-semibold transition-colors shadow-sm"
               aria-label="Open AI Assistant"
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -71,19 +68,31 @@ export default function Header() {
               <span className="sm:hidden">AI</span>
             </button>
 
+            {/* Dark / Light toggle */}
             <button
-              aria-label="Language"
-              className="p-2 rounded-full text-gray-500 hover:bg-gray-100 transition-colors"
+              onClick={toggle}
+              aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
-              </svg>
+              {theme === "dark" ? (
+                /* Sun icon */
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                    d="M12 3v1m0 16v1m8.66-9H21M3 12H2m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 5a7 7 0 100 14A7 7 0 0012 5z" />
+                </svg>
+              ) : (
+                /* Moon icon */
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+              )}
             </button>
 
             <button
               aria-label="Menu"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-full text-gray-500 hover:bg-gray-100 transition-colors"
+              className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
@@ -92,7 +101,7 @@ export default function Header() {
 
             <button
               aria-label="Profile"
-              className="p-2 rounded-full text-gray-500 hover:bg-gray-100 transition-colors"
+              className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />

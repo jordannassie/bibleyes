@@ -10,13 +10,13 @@ export default function MobileNav() {
     prefix === "/" ? pathname === "/" : pathname.startsWith(prefix);
 
   return (
-    <nav className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 flex items-stretch h-16 safe-area-inset-bottom">
+    <nav className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 flex items-stretch h-16 safe-area-inset-bottom transition-colors duration-200">
       {/* Home */}
       <Link
         href="/"
         className={[
           "flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold tracking-wide transition-colors",
-          isActive("/") ? "text-gray-900" : "text-gray-400 hover:text-gray-600",
+          isActive("/") ? "text-gray-900 dark:text-white" : "text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300",
         ].join(" ")}
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -31,7 +31,7 @@ export default function MobileNav() {
         href="/bible/web/john/1"
         className={[
           "flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold tracking-wide transition-colors",
-          isActive("/bible") ? "text-gray-900" : "text-gray-400 hover:text-gray-600",
+          isActive("/bible") ? "text-gray-900 dark:text-white" : "text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300",
         ].join(" ")}
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -44,10 +44,10 @@ export default function MobileNav() {
       {/* AI */}
       <button
         onClick={() => window.dispatchEvent(new CustomEvent("bibleyes:toggle-ai"))}
-        className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold tracking-wide text-gray-400 hover:text-gray-600 transition-colors"
+        className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold tracking-wide text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
       >
-        <span className="w-5 h-5 rounded-full bg-gray-900 flex items-center justify-center">
-          <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <span className="w-5 h-5 rounded-full bg-gray-900 dark:bg-white flex items-center justify-center">
+            <svg className="w-3 h-3 text-white dark:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
               d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
           </svg>
@@ -57,7 +57,7 @@ export default function MobileNav() {
 
       {/* User */}
       <button
-        className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold tracking-wide text-gray-400 hover:text-gray-600 transition-colors"
+        className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold tracking-wide text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
         aria-label="Profile"
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
