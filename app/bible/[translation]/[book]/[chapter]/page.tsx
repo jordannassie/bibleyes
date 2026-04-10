@@ -77,7 +77,7 @@ export default async function BibleReaderPage({
         ) : (
           <EmptyState
             title={`${bookMeta.name} ${chapterNum} not available`}
-            message="This chapter isn't in the local data yet. Import the full WEB Bible to read all 66 books, or try John 1–4, Genesis 1, Psalm 1 & 23, or Romans 8."
+            message="This chapter could not be loaded. Please check your connection and try again, or start reading from John 1."
             action={{ label: "Read John 1", href: "/bible/web/john/1" }}
           />
         )}

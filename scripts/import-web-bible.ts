@@ -7,10 +7,14 @@
  * Requires SUPABASE_SERVICE_ROLE_KEY in .env.local
  */
 
+import { config } from "dotenv";
 import { createClient } from "@supabase/supabase-js";
 import { readFileSync, existsSync } from "fs";
 import { join } from "path";
 import { BOOKS } from "../data/books";
+
+// Load .env.local
+config({ path: join(process.cwd(), ".env.local") });
 
 // ─── Env ──────────────────────────────────────────────────────────────────────
 
@@ -146,8 +150,21 @@ async function main() {
 
   // 3. Normalize verses
   console.log("📝  Normalizing verses...");
-  const normalized = normalize(raw);
-  console.log(`  ✓ ${normalized.length.toLocaleString()} verses found`);
+  const rawNormalized = normalize(raw);
+
+  // Deduplicate: same (bookSlug, chapter, verse) → concatenate text
+  const dedupeMap = new Map<string, NormalizedVerse>();
+  for (const v of rawNormalized) {
+    const key = `${v.bookSlug}-${v.chapter}-${v.verse}`;
+    const existing = dedupeMap.get(key);
+    if (existing) {
+      existing.text = existing.text.trimEnd() + " " + v.text.trimStart();
+    } else {
+      dedupeMap.set(key, { ...v });
+    }
+  }
+  const normalized = Array.from(dedupeMap.values());
+  console.log(`  ✓ ${normalized.length.toLocaleString()} verses found (deduplicated from ${rawNormalized.length.toLocaleString()})`);
 
   // 4. Insert in batches
   console.log(`📤  Inserting verses in batches of ${BATCH_SIZE}...`);

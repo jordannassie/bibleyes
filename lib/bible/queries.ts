@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { getBook } from "@/data/books";
 import { getChapter as getMockChapter } from "@/data/bible/web";
 import type {
@@ -20,6 +20,13 @@ function isSupabaseConfigured(): boolean {
     key.length > 20 &&
     !key.includes("placeholder")
   );
+}
+
+// Use a plain client (no cookies) — Bible content is public, no auth needed
+function getSupabase() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+  return createSupabaseClient(url, key);
 }
 
 function groupVersesIntoSections(verses: DbVerse[]): ChapterSection[] {
@@ -51,7 +58,7 @@ export async function getTranslations(): Promise<TranslationMeta[]> {
   }
 
   try {
-    const supabase = await createClient();
+    const supabase = getSupabase();
     const { data, error } = await supabase
       .from("translations")
       .select("code, name, description")
@@ -80,7 +87,7 @@ export async function getChapter(
   // Try Supabase
   if (isSupabaseConfigured()) {
     try {
-      const supabase = await createClient();
+      const supabase = getSupabase();
       const { data, error } = await supabase
         .from("bible_verses")
         .select("verse_number, verse_text, section_title, paragraph_break")
@@ -130,7 +137,7 @@ export async function searchVerses(
 
   if (isSupabaseConfigured()) {
     try {
-      const supabase = await createClient();
+      const supabase = getSupabase();
       const { data, error } = await supabase
         .from("bible_verses")
         .select("translation_code, book_slug, chapter_number, verse_number, verse_text")
