@@ -5,10 +5,11 @@ const features = [
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" />
       </svg>
     ),
-    eyebrow: "Experience it anywhere",
+    eyebrow: "Read anywhere",
     description:
-      "Access the Bible on any device — phone, tablet, or desktop. Your reading experience stays with you wherever you go.",
-    cta: "View Bible translations",
+      "Open BibleYes in any browser — phone, tablet, or desktop. No download, no account required.",
+    cta: "Start reading",
+    href: "/bible/web/john/1",
   },
   {
     icon: (
@@ -20,17 +21,20 @@ const features = [
     description:
       "Highlight verses, bookmark passages, and write personal notes. Build your own annotated scripture experience.",
     cta: "Create your free account",
+    href: "#",
   },
   {
     icon: (
       <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 8.25h3m-3 3h3M9 12.75h.008v.008H9v-.008zm0 3h.008v.008H9v-.008z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+          d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
       </svg>
     ),
-    eyebrow: "Install the app",
+    eyebrow: "AI Bible Assistant",
     description:
-      "BibleYes is completely free with no advertising. Read offline, get daily verse reminders, and more. Coming soon.",
-    cta: "Download the free app",
+      "Ask questions about any chapter or verse. Get Bible-based answers, summaries, and commentary — all from a Christian perspective.",
+    cta: "Try AI Assistant",
+    href: "/bible/web/john/1",
   },
 ];
 
@@ -52,7 +56,7 @@ export default function FeatureCards() {
                 {f.description}
               </p>
               <a
-                href="#"
+                href={f.href}
                 className="mt-auto text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline"
               >
                 {f.cta}
