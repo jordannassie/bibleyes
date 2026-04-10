@@ -63,7 +63,7 @@ export default function VerseRow({ verse, translationCode, bookSlug, chapter, bo
   return (
     <span ref={ref} className="relative inline">
       {/* Verse number */}
-      <sup className="text-xs font-semibold text-gray-400 mr-0.5 select-none leading-none">
+      <sup className="text-xs font-semibold text-gray-400 dark:text-[#666666] mr-0.5 select-none leading-none">
         {verse.number}
       </sup>
 

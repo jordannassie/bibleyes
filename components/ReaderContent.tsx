@@ -21,7 +21,7 @@ export default function ReaderContent({ data }: Props) {
               {section.title}
             </h2>
           )}
-          <p className="text-lg font-serif leading-[1.95] text-gray-800 dark:text-[#e8e8e8]">
+          <p className="text-lg font-serif leading-[1.95] text-gray-800 dark:text-white">
             {section.verses.map((verse) => (
               <VerseRow
                 key={verse.number}
