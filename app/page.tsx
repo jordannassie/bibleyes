@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import AppCTA from "@/components/AppCTA";
 import FeatureCards from "@/components/FeatureCards";
 import Footer from "@/components/Footer";
+import VerseOfDayShare from "@/components/VerseOfDayShare";
 
 const LOGO_URL =
   "https://dhuidtxkthlvkqyuxbkw.supabase.co/storage/v1/object/public/BibleYes/logos/ChatGPT%20Image%20Apr%2010,%202026,%2003_24_13%20PM.png";
@@ -35,11 +36,11 @@ export default function HomePage() {
               World English Bible · Public Domain
             </p>
             <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight mb-4">
-              Read the Bible with clarity.
+              Read the Bible with AI.
             </h1>
             <p className="text-lg text-gray-500 mb-10 max-w-xl mx-auto leading-relaxed">
               A clean, distraction-free reading experience for the World English Bible.
-              Search across all 66 books. Notes, highlights, and AI coming soon.
+              Ask questions about any verse — Bible-based answers powered by AI.
             </p>
 
             <div className="flex flex-wrap justify-center gap-3 mb-16">
@@ -63,56 +64,64 @@ export default function HomePage() {
               </Link>
             </div>
 
-            {/* Verse card */}
-            <div className="max-w-lg mx-auto rounded-2xl border border-gray-100 bg-gray-50 p-8 text-left shadow-sm">
-              <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">
-                Verse of the day
-              </p>
-              <blockquote className="text-gray-800 text-lg font-serif leading-relaxed mb-3">
-                "Your word is a lamp to my feet, and a light for my path."
-              </blockquote>
-              <cite className="text-sm font-medium text-gray-500 not-italic">
-                Psalm 119:105 · WEB
-              </cite>
-              <div className="mt-5 pt-4 border-t border-gray-200 flex gap-4">
-                <Link
-                  href="/bible/web/psalms/119"
-                  className="text-sm font-medium text-blue-600 hover:text-blue-700"
-                >
-                  Read Psalm 119 →
-                </Link>
-                <Link
-                  href="/bible/web/john/1"
-                  className="text-sm font-medium text-gray-500 hover:text-gray-700"
-                >
-                  Start in John →
-                </Link>
-              </div>
-            </div>
+            {/* Verse of the Day card */}
+            <VerseOfDayShare />
           </div>
         </section>
 
-        {/* AI Assistant badge */}
-        <section className="border-t border-gray-100 bg-gray-50 py-5 px-4">
-          <div className="max-w-3xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-3 text-center sm:text-left">
-            <div className="flex items-center gap-2 flex-shrink-0">
-              <div className="w-7 h-7 rounded-lg bg-gray-900 flex items-center justify-center">
-                <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+        {/* AI Bible Assistant — full section */}
+        <section className="border-t border-gray-100 bg-gray-950 py-20 px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            {/* Bot icon */}
+            <div className="flex justify-center mb-6">
+              <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center">
+                <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
+                    d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                 </svg>
               </div>
-              <span className="text-xs font-bold uppercase tracking-widest text-gray-500">
-                AI Bible Assistant
-              </span>
             </div>
-            <p className="text-sm text-gray-600">
-              Ask questions about any chapter or verse — Bible-based answers, summaries, and commentary.
+
+            <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-3">
+              AI Bible Assistant
             </p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-white leading-tight mb-4">
+              Ask anything about Scripture.
+            </h2>
+            <p className="text-lg text-gray-400 mb-10 max-w-xl mx-auto leading-relaxed">
+              Get Bible-based answers, chapter summaries, cross-references, and commentary — all from a Christian perspective. Powered by AI, grounded in the Word.
+            </p>
+
+            {/* Sample prompts */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl mx-auto mb-10 text-left">
+              {[
+                "What does John 3:16 mean?",
+                "Summarize the book of Romans",
+                "What are cross-references for Psalm 23?",
+                "How can I apply this verse today?",
+              ].map((q) => (
+                <Link
+                  key={q}
+                  href="/bible/web/john/1"
+                  className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-300 transition-colors"
+                >
+                  <svg className="w-4 h-4 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  {q}
+                </Link>
+              ))}
+            </div>
+
             <Link
               href="/bible/web/john/1"
-              className="flex-shrink-0 text-sm font-medium text-blue-600 hover:text-blue-700 whitespace-nowrap"
+              className="inline-flex items-center gap-2 bg-white text-gray-900 rounded-full px-8 py-3.5 text-sm font-bold hover:bg-gray-100 transition-colors shadow-lg"
             >
-              Try it now →
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                  d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+              </svg>
+              Open AI Assistant
             </Link>
           </div>
         </section>
