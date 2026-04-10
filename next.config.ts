@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "dhuidtxkthlvkqyuxbkw.supabase.co",
       },
+      {
+        protocol: "https",
+        hostname: "api.qrserver.com",
+      },
     ],
   },
 };

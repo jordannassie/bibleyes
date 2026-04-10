@@ -1,24 +1,52 @@
+import Image from "next/image";
 import Link from "next/link";
+
+const LOGO_URL =
+  "https://dhuidtxkthlvkqyuxbkw.supabase.co/storage/v1/object/public/BibleYes/logos/ChatGPT%20Image%20Apr%2010,%202026,%2003_24_13%20PM.png";
+
+const QR_URL =
+  "https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https://bibleyes.com&bgcolor=ffffff&color=000000&margin=2&qzone=1";
 
 export default function AppCTA() {
   return (
-    <section className="bg-white py-20 px-4">
+    <section className="bg-white py-20 px-4 border-t border-gray-100">
       <div className="max-w-2xl mx-auto text-center">
-        {/* QR placeholder */}
-        <div className="mx-auto mb-8 w-36 h-36 rounded-2xl bg-gray-900 flex flex-col items-center justify-center gap-1 shadow-lg">
-          <div className="grid grid-cols-3 gap-1 p-3">
-            {Array.from({ length: 9 }).map((_, i) => (
-              <div
-                key={i}
-                className={`w-3 h-3 rounded-sm ${
-                  [0, 2, 6, 8, 4].includes(i) ? "bg-white" : "bg-gray-600"
-                }`}
-              />
-            ))}
+
+        {/* Logo + QR code side by side */}
+        <div className="flex items-center justify-center gap-6 mb-8">
+          {/* Bible icon */}
+          <div className="flex flex-col items-center gap-2">
+            <Image
+              src={LOGO_URL}
+              alt="BibleYes app icon"
+              width={80}
+              height={80}
+              className="rounded-2xl shadow-md"
+            />
+            <span className="text-xs font-semibold text-gray-500 tracking-wide">
+              BibleYes
+            </span>
           </div>
-          <p className="text-white text-[9px] font-medium tracking-wider mt-1">
-            SCAN TO INSTALL
-          </p>
+
+          {/* Divider */}
+          <div className="h-24 w-px bg-gray-200" />
+
+          {/* QR code */}
+          <div className="flex flex-col items-center gap-2">
+            <div className="rounded-2xl border border-gray-200 p-2 bg-white shadow-sm">
+              <Image
+                src={QR_URL}
+                alt="Scan to open BibleYes.com"
+                width={96}
+                height={96}
+                className="rounded-lg"
+                unoptimized
+              />
+            </div>
+            <span className="text-xs font-semibold text-gray-500 tracking-wide uppercase">
+              Scan to open
+            </span>
+          </div>
         </div>
 
         <h2 className="text-2xl font-bold text-gray-900 mb-2">
