@@ -5,15 +5,27 @@ import ReaderContent from "@/components/ReaderContent";
 import ChapterNavButtons from "@/components/ChapterNavButtons";
 import EmptyState from "@/components/EmptyState";
 import Footer from "@/components/Footer";
+import AIAssistantDrawer from "@/components/AIAssistantDrawer";
 import { getChapter, getTranslations } from "@/lib/bible/queries";
 import { getChapterNav } from "@/lib/bible/navigation";
 import { getBook } from "@/data/books";
+import type { ChapterResult } from "@/lib/bible/types";
 
 type Params = {
   translation: string;
   book: string;
   chapter: string;
 };
+
+function extractChapterText(data: ChapterResult): string {
+  return data.sections
+    .map((s) => {
+      const heading = s.title ? `[${s.title}]\n` : "";
+      const verses = s.verses.map((v) => `${v.number}. ${v.text}`).join(" ");
+      return heading + verses;
+    })
+    .join("\n\n");
+}
 
 export async function generateMetadata({ params }: { params: Promise<Params> }) {
   const { book, chapter, translation } = await params;
@@ -33,22 +45,20 @@ export default async function BibleReaderPage({
   const { translation, book, chapter: chapterStr } = await params;
   const chapterNum = Number(chapterStr);
 
-  // Validate book exists in canon
   const bookMeta = getBook(book);
   if (!bookMeta) notFound();
 
-  // Validate chapter number
   if (isNaN(chapterNum) || chapterNum < 1 || chapterNum > bookMeta.chapterCount) {
     notFound();
   }
 
-  // Fetch data + translations in parallel
   const [data, translations] = await Promise.all([
     getChapter(translation, book, chapterNum),
     getTranslations(),
   ]);
 
   const { prevRoute, nextRoute } = getChapterNav(translation, book, chapterNum);
+  const chapterText = data ? extractChapterText(data) : "";
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -67,13 +77,24 @@ export default async function BibleReaderPage({
         ) : (
           <EmptyState
             title={`${bookMeta.name} ${chapterNum} not available`}
-            message="This chapter isn't in the local data yet. Import the full WEB Bible to read all 66 books, or start with John 1."
+            message="This chapter isn't in the local data yet. Import the full WEB Bible to read all 66 books, or try John 1–4, Genesis 1, Psalm 1 & 23, or Romans 8."
             action={{ label: "Read John 1", href: "/bible/web/john/1" }}
           />
         )}
       </main>
 
       <ChapterNavButtons prevRoute={prevRoute} nextRoute={nextRoute} />
+
+      {/* AI Assistant — only shown when chapter data is available */}
+      {data && (
+        <AIAssistantDrawer
+          bookSlug={book}
+          bookName={bookMeta.name}
+          chapter={chapterNum}
+          translation={translation}
+          chapterText={chapterText}
+        />
+      )}
 
       <Footer />
     </div>

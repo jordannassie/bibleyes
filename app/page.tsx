@@ -92,6 +92,31 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* AI Assistant badge */}
+        <section className="border-t border-gray-100 bg-gray-50 py-5 px-4">
+          <div className="max-w-3xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-3 text-center sm:text-left">
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="w-7 h-7 rounded-lg bg-gray-900 flex items-center justify-center">
+                <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                </svg>
+              </div>
+              <span className="text-xs font-bold uppercase tracking-widest text-gray-500">
+                AI Bible Assistant
+              </span>
+            </div>
+            <p className="text-sm text-gray-600">
+              Ask questions about any chapter or verse — Bible-based answers, summaries, and commentary.
+            </p>
+            <Link
+              href="/bible/web/john/1"
+              className="flex-shrink-0 text-sm font-medium text-blue-600 hover:text-blue-700 whitespace-nowrap"
+            >
+              Try it now →
+            </Link>
+          </div>
+        </section>
+
         <AppCTA />
         <FeatureCards />
       </main>

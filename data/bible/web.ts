@@ -173,7 +173,225 @@ const PSALM_1: ChapterData = {
   ],
 };
 
-const ALL_CHAPTERS: ChapterData[] = [JOHN_1, GENESIS_1, PSALM_1];
+const JOHN_2: ChapterData = {
+  translation: "web", book: "john", bookDisplay: "John", chapter: 2,
+  sections: [
+    {
+      title: "The Wedding at Cana",
+      verses: [
+        { number: 1, text: "The third day, there was a wedding in Cana of Galilee. Jesus' mother was there." },
+        { number: 2, text: "Jesus also was invited, with his disciples, to the wedding." },
+        { number: 3, text: "When the wine ran out, Jesus' mother said to him, \"They have no wine.\"" },
+        { number: 4, text: "Jesus said to her, \"Woman, what does that have to do with you and me? My hour has not yet come.\"" },
+        { number: 5, text: "His mother said to the servants, \"Whatever he says to you, do it.\"" },
+        { number: 6, text: "Now there were six water pots of stone set there after the Jewish manner of purifying, containing two or three metretes apiece." },
+        { number: 7, text: "Jesus said to them, \"Fill the water pots with water.\" They filled them up to the brim." },
+        { number: 8, text: "He said to them, \"Now draw some out, and take it to the ruler of the feast.\" So they took it." },
+        { number: 9, text: "When the ruler of the feast tasted the water now become wine, and didn't know where it came from (but the servants who had drawn the water knew), the ruler of the feast called the bridegroom," },
+        { number: 10, text: "and said to him, \"Everyone serves the good wine first, and when the guests have drunk freely, then that which is worse. You have kept the good wine until now!\"" },
+        { number: 11, text: "This beginning of his signs Jesus did in Cana of Galilee, and revealed his glory; and his disciples believed in him." },
+        { number: 12, text: "After this, he went down to Capernaum, he, and his mother, his brothers, and his disciples; and they stayed there a few days." },
+      ],
+    },
+    {
+      title: "Jesus Clears the Temple",
+      verses: [
+        { number: 13, text: "The Passover of the Jews was at hand, and Jesus went up to Jerusalem." },
+        { number: 14, text: "He found in the temple those who sold oxen, sheep, and doves, and the changers of money sitting." },
+        { number: 15, text: "He made a whip of cords, and threw all out of the temple, both the sheep and the oxen; and he poured out the changers' money and overthrew their tables." },
+        { number: 16, text: "To those who sold the doves, he said, \"Take these things out of here! Don't make my Father's house a marketplace!\"" },
+        { number: 17, text: "His disciples remembered that it was written, \"Zeal for your house will consume me.\"" },
+        { number: 18, text: "The Jews therefore answered him, \"What sign do you show us, seeing that you do these things?\"" },
+        { number: 19, text: "Jesus answered them, \"Destroy this temple, and in three days I will raise it up.\"" },
+        { number: 20, text: "The Jews therefore said, \"It took forty-six years to build this temple! Will you raise it up in three days?\"" },
+        { number: 21, text: "But he spoke of the temple of his body." },
+        { number: 22, text: "When therefore he was raised from the dead, his disciples remembered that he said this, and they believed the Scripture, and the word which Jesus had said." },
+        { number: 23, text: "Now when he was in Jerusalem at the Passover, during the feast, many believed in his name, observing his signs which he did." },
+        { number: 24, text: "But Jesus didn't trust himself to them, because he knew everyone," },
+        { number: 25, text: "and because he didn't need for anyone to testify concerning man; for he himself knew what was in man." },
+      ],
+    },
+  ],
+};
+
+const JOHN_3: ChapterData = {
+  translation: "web", book: "john", bookDisplay: "John", chapter: 3,
+  sections: [
+    {
+      title: "Jesus Teaches Nicodemus",
+      verses: [
+        { number: 1, text: "Now there was a man of the Pharisees named Nicodemus, a ruler of the Jews." },
+        { number: 2, text: "The same came to him by night, and said to him, \"Rabbi, we know that you are a teacher come from God, for no one can do these signs that you do, unless God is with him.\"" },
+        { number: 3, text: "Jesus answered him, \"Most certainly I tell you, unless one is born anew, he can't see God's Kingdom.\"" },
+        { number: 4, text: "Nicodemus said to him, \"How can a man be born when he is old? Can he enter a second time into his mother's womb, and be born?\"" },
+        { number: 5, text: "Jesus answered, \"Most certainly I tell you, unless one is born of water and spirit, he can't enter into God's Kingdom." },
+        { number: 6, text: "That which is born of the flesh is flesh. That which is born of the Spirit is spirit." },
+        { number: 7, text: "Don't marvel that I said to you, 'You must be born anew.'" },
+        { number: 8, text: "The wind blows where it wants to, and you hear its sound, but don't know where it comes from and where it is going. So is everyone who is born of the Spirit.\"" },
+        { number: 9, text: "Nicodemus answered him, \"How can these things be?\"" },
+        { number: 10, text: "Jesus answered him, \"Are you the teacher of Israel, and don't understand these things?" },
+        { number: 11, text: "Most certainly I tell you, we speak that which we know, and testify of that which we have seen, and you don't receive our witness." },
+        { number: 12, text: "If I told you earthly things and you don't believe, how will you believe if I tell you heavenly things?" },
+        { number: 13, text: "No one has ascended into heaven, but he who descended out of heaven, the Son of Man, who is in heaven." },
+        { number: 14, text: "As Moses lifted up the serpent in the wilderness, even so must the Son of Man be lifted up," },
+        { number: 15, text: "that whoever believes in him should not perish, but have eternal life." },
+        { number: 16, text: "For God so loved the world, that he gave his one and only Son, that whoever believes in him should not perish, but have eternal life." },
+        { number: 17, text: "For God didn't send his Son into the world to judge the world, but that the world should be saved through him." },
+        { number: 18, text: "He who believes in him is not judged. He who doesn't believe has been judged already, because he has not believed in the name of the one and only Son of God." },
+        { number: 19, text: "This is the judgment, that the light has come into the world, and men loved the darkness rather than the light; for their works were evil." },
+        { number: 20, text: "For everyone who does evil hates the light, and doesn't come to the light, lest his works would be exposed." },
+        { number: 21, text: "But he who does the truth comes to the light, that his works may be revealed, that they have been done in God.\"" },
+      ],
+    },
+    {
+      title: "John the Baptist Exalts Christ",
+      verses: [
+        { number: 22, text: "After these things, Jesus came with his disciples into the land of Judea. He stayed there with them, and baptized." },
+        { number: 23, text: "John also was baptizing in Enon near Salim, because there was much water there. They came, and were baptized." },
+        { number: 24, text: "For John was not yet thrown into prison." },
+        { number: 25, text: "There arose therefore a questioning on the part of John's disciples with some Jews about purification." },
+        { number: 26, text: "They came to John and said to him, \"Rabbi, he who was with you beyond the Jordan, to whom you have testified, behold, the same baptizes, and everyone is coming to him.\"" },
+        { number: 27, text: "John answered, \"A man can receive nothing, unless it has been given him from heaven." },
+        { number: 28, text: "You yourselves testify that I said, 'I am not the Christ,' but, 'I have been sent before him.'" },
+        { number: 29, text: "He who has the bride is the bridegroom; but the friend of the bridegroom, who stands and hears him, rejoices greatly because of the bridegroom's voice. This, my joy, therefore is made full." },
+        { number: 30, text: "He must increase, but I must decrease." },
+        { number: 31, text: "He who comes from above is above all. He who is from the earth belongs to the earth, and speaks of the earth. He who comes from heaven is above all." },
+        { number: 32, text: "What he has seen and heard, of that he testifies; and no one receives his witness." },
+        { number: 33, text: "He who has received his witness has set his seal to this, that God is true." },
+        { number: 34, text: "For he whom God has sent speaks the words of God; for God gives the Spirit without measure." },
+        { number: 35, text: "The Father loves the Son, and has given all things into his hand." },
+        { number: 36, text: "One who believes in the Son has eternal life, but one who disobeys the Son won't see life, but the wrath of God remains on him.\"" },
+      ],
+    },
+  ],
+};
+
+const JOHN_4: ChapterData = {
+  translation: "web", book: "john", bookDisplay: "John", chapter: 4,
+  sections: [
+    {
+      title: "Jesus and the Samaritan Woman",
+      verses: [
+        { number: 1, text: "Therefore when the Lord knew that the Pharisees had heard that Jesus was making and baptizing more disciples than John" },
+        { number: 2, text: "(although Jesus himself didn't baptize, but his disciples)," },
+        { number: 3, text: "he left Judea and departed into Galilee." },
+        { number: 4, text: "He needed to pass through Samaria." },
+        { number: 5, text: "So he came to a city of Samaria, called Sychar, near the parcel of ground that Jacob gave to his son, Joseph." },
+        { number: 6, text: "Jacob's well was there. Jesus therefore, being tired from his journey, sat down by the well. It was about the sixth hour." },
+        { number: 7, text: "A woman of Samaria came to draw water. Jesus said to her, \"Give me a drink.\"" },
+        { number: 8, text: "For his disciples had gone away into the city to buy food." },
+        { number: 9, text: "The Samaritan woman therefore said to him, \"How is it that you, being a Jew, ask for a drink from me, a Samaritan woman?\" (For Jews have no dealings with Samaritans.)" },
+        { number: 10, text: "Jesus answered her, \"If you knew the gift of God, and who it is who says to you, 'Give me a drink,' you would have asked him, and he would have given you living water.\"" },
+        { number: 11, text: "The woman said to him, \"Sir, you have nothing to draw with, and the well is deep. From where then have you that living water?" },
+        { number: 12, text: "Are you greater than our father, Jacob, who gave us the well, and drank from it himself, as did his children, and his livestock?\"" },
+        { number: 13, text: "Jesus answered her, \"Everyone who drinks of this water will thirst again," },
+        { number: 14, text: "but whoever drinks of the water that I will give him will never thirst again; but the water that I will give him will become in him a well of water springing up to eternal life.\"" },
+        { number: 15, text: "The woman said to him, \"Sir, give me this water, so that I don't get thirsty, neither come all the way here to draw.\"" },
+        { number: 16, text: "Jesus said to her, \"Go, call your husband, and come here.\"" },
+        { number: 17, text: "The woman answered, \"I have no husband.\" Jesus said to her, \"You said well, 'I have no husband,'" },
+        { number: 18, text: "for you have had five husbands; and he whom you now have is not your husband. This you have said truly.\"" },
+        { number: 19, text: "The woman said to him, \"Sir, I perceive that you are a prophet." },
+        { number: 20, text: "Our fathers worshiped in this mountain, and you Jews say that in Jerusalem is the place where people ought to worship.\"" },
+        { number: 21, text: "Jesus said to her, \"Woman, believe me, the hour comes, when neither in this mountain, nor in Jerusalem, will you worship the Father." },
+        { number: 22, text: "You worship that which you don't know. We worship that which we know; for salvation is from the Jews." },
+        { number: 23, text: "But the hour comes, and now is, when the true worshippers will worship the Father in spirit and truth, for the Father seeks such to be his worshippers." },
+        { number: 24, text: "God is spirit, and those who worship him must worship in spirit and truth.\"" },
+        { number: 25, text: "The woman said to him, \"I know that Messiah comes,\" (he who is called Christ). \"When he has come, he will declare to us all things.\"" },
+        { number: 26, text: "Jesus said to her, \"I am he, the one who speaks to you.\"" },
+        { number: 27, text: "At this, his disciples came. They marveled that he was speaking with a woman; yet no one said, \"What are you looking for?\" or, \"Why do you speak with her?\"" },
+        { number: 28, text: "So the woman left her water pot, and went away into the city, and said to the people," },
+        { number: 29, text: "\"Come, see a man who told me everything that I did. Can this be the Christ?\"" },
+        { number: 30, text: "They went out of the city, and were coming to him." },
+      ],
+    },
+    {
+      title: "The Harvest Is Plentiful",
+      verses: [
+        { number: 31, text: "In the meanwhile, the disciples urged him, saying, \"Rabbi, eat.\"" },
+        { number: 32, text: "But he said to them, \"I have food to eat that you don't know about.\"" },
+        { number: 33, text: "The disciples therefore said to one another, \"Has anyone brought him something to eat?\"" },
+        { number: 34, text: "Jesus said to them, \"My food is to do the will of him who sent me, and to accomplish his work." },
+        { number: 35, text: "Don't you say, 'There are yet four months until the harvest?' Behold, I tell you, lift up your eyes, and look at the fields, that they are white for harvest already." },
+        { number: 36, text: "He who reaps receives wages, and gathers fruit to eternal life; that both he who sows and he who reaps may rejoice together." },
+        { number: 37, text: "For in this the saying is true, 'One sows, and another reaps.'" },
+        { number: 38, text: "I sent you to reap that for which you haven't labored. Others have labored, and you have entered into their labor.\"" },
+        { number: 39, text: "From that city many of the Samaritans believed in him because of the word of the woman, who testified, \"He told me everything that I did.\"" },
+        { number: 40, text: "So when the Samaritans came to him, they begged him to stay with them. He stayed there two days." },
+        { number: 41, text: "Many more believed because of his word." },
+        { number: 42, text: "They said to the woman, \"Now we believe, not because of your speaking; for we have heard for ourselves, and know that this is indeed the Christ, the Savior of the world.\"" },
+      ],
+    },
+    {
+      title: "Jesus Heals an Official's Son",
+      verses: [
+        { number: 43, text: "After the two days he went out from there and went into Galilee." },
+        { number: 44, text: "For Jesus himself testified that a prophet has no honor in his own country." },
+        { number: 45, text: "So when he came into Galilee, the Galileans received him, having seen all the things that he did in Jerusalem at the feast, for they also went to the feast." },
+        { number: 46, text: "Jesus came therefore again to Cana of Galilee, where he made the water into wine. There was a certain nobleman whose son was sick at Capernaum." },
+        { number: 47, text: "When he heard that Jesus had come out of Judea into Galilee, he went to him, and begged him that he would come down and heal his son, for he was at the point of death." },
+        { number: 48, text: "Jesus therefore said to him, \"Unless you see signs and wonders, you will in no way believe.\"" },
+        { number: 49, text: "The nobleman said to him, \"Sir, come down before my child dies.\"" },
+        { number: 50, text: "Jesus said to him, \"Go your way. Your son lives.\" The man believed the word that Jesus spoke to him, and he went his way." },
+        { number: 51, text: "As he was now going down, his servants met him and reported, saying \"Your child lives!\"" },
+        { number: 52, text: "So he inquired of them the hour when he began to get better. They said therefore to him, \"Yesterday at the seventh hour, the fever left him.\"" },
+        { number: 53, text: "So the father knew that it was at that hour in which Jesus said to him, \"Your son lives.\" He believed, as did his whole house." },
+        { number: 54, text: "This is again the second sign that Jesus did, having come out of Judea into Galilee." },
+      ],
+    },
+  ],
+};
+
+const PSALM_23: ChapterData = {
+  translation: "web", book: "psalms", bookDisplay: "Psalms", chapter: 23,
+  sections: [
+    {
+      title: "The LORD Is My Shepherd",
+      verses: [
+        { number: 1, text: "The LORD is my shepherd; I shall lack nothing." },
+        { number: 2, text: "He makes me lie down in green pastures. He leads me beside still waters." },
+        { number: 3, text: "He restores my soul. He guides me in the paths of righteousness for his name's sake." },
+        { number: 4, text: "Even though I walk through the valley of the shadow of death, I will fear no evil, for you are with me. Your rod and your staff, they comfort me." },
+        { number: 5, text: "You prepare a table before me in the presence of my enemies. You anoint my head with oil. My cup runs over." },
+        { number: 6, text: "Surely goodness and loving kindness shall follow me all the days of my life, and I will dwell in the LORD's house forever." },
+      ],
+    },
+  ],
+};
+
+const ROMANS_8: ChapterData = {
+  translation: "web", book: "romans", bookDisplay: "Romans", chapter: 8,
+  sections: [
+    {
+      title: "Life Through the Spirit",
+      verses: [
+        { number: 1, text: "There is therefore now no condemnation to those who are in Christ Jesus, who don't walk according to the flesh, but according to the Spirit." },
+        { number: 2, text: "For the law of the Spirit of life in Christ Jesus made me free from the law of sin and of death." },
+        { number: 3, text: "For what the law couldn't do, in that it was weak through the flesh, God did, sending his own Son in the likeness of sinful flesh and for sin, he condemned sin in the flesh;" },
+        { number: 4, text: "that the ordinance of the law might be fulfilled in us, who walk not after the flesh, but after the Spirit." },
+        { number: 5, text: "For those who live according to the flesh set their minds on the things of the flesh, but those who live according to the Spirit, the things of the Spirit." },
+        { number: 6, text: "For the mind of the flesh is death, but the mind of the Spirit is life and peace;" },
+        { number: 7, text: "because the mind of the flesh is hostile toward God; for it is not subject to God's law, neither indeed can it be." },
+        { number: 8, text: "Those who are in the flesh can't please God." },
+        { number: 9, text: "But you are not in the flesh but in the Spirit, if it is so that the Spirit of God dwells in you. But if any man doesn't have the Spirit of Christ, he is not his." },
+        { number: 10, text: "If Christ is in you, the body is dead because of sin, but the spirit is alive because of righteousness." },
+        { number: 11, text: "But if the Spirit of him who raised up Jesus from the dead dwells in you, he who raised up Christ Jesus from the dead will also give life to your mortal bodies through his Spirit who dwells in you." },
+        { number: 12, text: "So then, brothers, we are debtors, not to the flesh, to live after the flesh." },
+        { number: 13, text: "For if you live after the flesh, you must die; but if by the Spirit you put to death the deeds of the body, you will live." },
+        { number: 14, text: "For as many as are led by the Spirit of God, these are children of God." },
+        { number: 15, text: "For you didn't receive the spirit of bondage again to fear, but you received the Spirit of adoption, by whom we cry, \"Abba! Father!\"" },
+        { number: 16, text: "The Spirit himself testifies with our spirit that we are children of God;" },
+        { number: 17, text: "and if children, then heirs; heirs of God, and joint heirs with Christ; if indeed we suffer with him, that we may also be glorified with him." },
+        { number: 18, text: "For I consider that the sufferings of this present time are not worth comparing with the glory which is to be revealed toward us." },
+        { number: 28, text: "We know that all things work together for good for those who love God, to those who are called according to his purpose." },
+        { number: 29, text: "For whom he foreknew, he also predestined to be conformed to the image of his Son, that he might be the firstborn among many brothers." },
+        { number: 38, text: "For I am persuaded, that neither death, nor life, nor angels, nor principalities, nor things present, nor things to come, nor powers," },
+        { number: 39, text: "nor height, nor depth, nor any other created thing, will be able to separate us from the love of God, which is in Christ Jesus our Lord." },
+      ],
+    },
+  ],
+};
+
+const ALL_CHAPTERS: ChapterData[] = [JOHN_1, JOHN_2, JOHN_3, JOHN_4, GENESIS_1, PSALM_1, PSALM_23, ROMANS_8];
 
 export function getChapter(
   book: string,
