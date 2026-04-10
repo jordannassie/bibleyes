@@ -3,6 +3,20 @@
 /* Tailwind v4: class-based dark mode — applies when html has .dark class */
 @custom-variant dark (&:is(.dark *));
 
+/* ── Dark mode base palette ─────────────────────────────────────────────── */
+.dark {
+  color-scheme: dark;
+  background-color: #0f0f0f;
+  color: #ffffff;
+}
+
+/* Crisp black backgrounds — no blue tint */
+.dark .dk-bg-base      { background-color: #0f0f0f; }
+.dark .dk-bg-surface   { background-color: #141414; }
+.dark .dk-bg-elevated  { background-color: #1c1c1c; }
+.dark .dk-bg-card      { background-color: #222222; }
+.dark .dk-border       { border-color: #2a2a2a; }
+
 :root {
   --font-inter: 'Inter', system-ui, sans-serif;
   --font-lora: 'Lora', Georgia, serif;

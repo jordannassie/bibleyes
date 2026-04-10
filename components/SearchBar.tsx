@@ -25,7 +25,7 @@ export default function SearchBar({ defaultValue = "" }: { defaultValue?: string
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search verses, topics, and questions..."
-        className="w-full rounded-full border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 py-2 pl-9 pr-4 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:border-gray-400 dark:focus:border-gray-500 focus:bg-white dark:focus:bg-gray-750 focus:ring-0 transition-colors"
+        className="w-full rounded-full border border-gray-200 dark:border-[#333333] bg-gray-50 dark:bg-[#1c1c1c] py-2 pl-9 pr-4 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-[#666666] outline-none focus:border-gray-400 dark:focus:border-[#555555] focus:bg-white dark:focus:bg-gray-750 focus:ring-0 transition-colors"
       />
     </form>
   );

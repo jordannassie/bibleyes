@@ -9,7 +9,7 @@ export default function ReaderContent({ data }: Props) {
   return (
     <article className="max-w-2xl mx-auto px-4 sm:px-6 py-12">
       {/* Chapter title */}
-      <h1 className="text-center text-2xl font-bold tracking-widest uppercase text-gray-900 dark:text-gray-100 mb-10">
+      <h1 className="text-center text-2xl font-bold tracking-widest uppercase text-gray-900 dark:text-white mb-10">
         {data.book.name} {data.chapter}
       </h1>
 
@@ -17,11 +17,11 @@ export default function ReaderContent({ data }: Props) {
       {data.sections.map((section, si) => (
         <section key={si} className="mb-8">
           {section.title && (
-            <h2 className="text-base font-bold text-gray-900 dark:text-gray-200 mb-3">
+            <h2 className="text-base font-bold text-gray-900 dark:text-white mb-3">
               {section.title}
             </h2>
           )}
-          <p className="text-lg font-serif leading-[1.95] text-gray-800 dark:text-gray-300">
+          <p className="text-lg font-serif leading-[1.95] text-gray-800 dark:text-[#e8e8e8]">
             {section.verses.map((verse) => (
               <VerseRow
                 key={verse.number}

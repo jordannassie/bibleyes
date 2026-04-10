@@ -40,24 +40,24 @@ const features = [
 
 export default function FeatureCards() {
   return (
-    <section className="border-t border-gray-100 bg-white">
+    <section className="border-t border-gray-100 dark:border-[#2a2a2a] bg-white dark:bg-[#0f0f0f] transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-gray-100 rounded-2xl overflow-hidden shadow-sm">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-gray-100 dark:bg-[#2a2a2a] rounded-2xl overflow-hidden shadow-sm">
           {features.map((f, i) => (
             <div
               key={i}
-              className="bg-white flex flex-col items-center text-center px-8 py-10 gap-4"
+              className="bg-white dark:bg-[#141414] flex flex-col items-center text-center px-8 py-10 gap-4"
             >
-              <span className="text-gray-400">{f.icon}</span>
-              <p className="text-xs font-bold tracking-widest uppercase text-gray-500">
+              <span className="text-gray-400 dark:text-[#666666]">{f.icon}</span>
+              <p className="text-xs font-bold tracking-widest uppercase text-gray-500 dark:text-[#888888]">
                 {f.eyebrow}
               </p>
-              <p className="text-sm text-gray-600 leading-relaxed max-w-xs">
+              <p className="text-sm text-gray-600 dark:text-[#aaaaaa] leading-relaxed max-w-xs">
                 {f.description}
               </p>
               <a
                 href={f.href}
-                className="mt-auto text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline"
+                className="mt-auto text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:underline"
               >
                 {f.cta}
               </a>

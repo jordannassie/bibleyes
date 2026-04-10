@@ -34,19 +34,19 @@ export default function VerseOfDayShare() {
   }
 
   return (
-    <div className="max-w-lg mx-auto rounded-2xl border border-gray-100 bg-gray-50 p-8 text-left shadow-sm">
-      <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">
+    <div className="max-w-lg mx-auto rounded-2xl border border-gray-100 dark:border-[#2a2a2a] bg-gray-50 dark:bg-[#1a1a1a] p-8 text-left shadow-sm">
+      <p className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-[#666666] mb-4">
         Verse of the day
       </p>
-      <blockquote className="text-gray-800 text-lg font-serif leading-relaxed mb-3">
+      <blockquote className="text-gray-800 dark:text-white text-lg font-serif leading-relaxed mb-3">
         &ldquo;{VERSE_TEXT}&rdquo;
       </blockquote>
-      <cite className="text-sm font-medium text-gray-500 not-italic">
+      <cite className="text-sm font-medium text-gray-500 dark:text-[#888888] not-italic">
         {VERSE_REF}
       </cite>
 
       {/* Share row */}
-      <div className="mt-5 pt-4 border-t border-gray-200 flex items-center justify-between gap-3 flex-wrap">
+      <div className="mt-5 pt-4 border-t border-gray-200 dark:border-[#2a2a2a] flex items-center justify-between gap-3 flex-wrap">
         <Link
           href={VERSE_HREF}
           className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"

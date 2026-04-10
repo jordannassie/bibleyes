@@ -9,7 +9,7 @@ const QR_URL =
 
 export default function AppCTA() {
   return (
-    <section className="bg-white py-20 px-4 border-t border-gray-100">
+    <section className="bg-white dark:bg-[#141414] py-20 px-4 border-t border-gray-100 dark:border-[#2a2a2a] transition-colors duration-200">
       <div className="max-w-2xl mx-auto text-center">
 
         {/* Logo + QR side by side */}
@@ -22,13 +22,13 @@ export default function AppCTA() {
               height={80}
               className="rounded-2xl shadow-md"
             />
-            <span className="text-xs font-semibold text-gray-500 tracking-wide">BibleYes</span>
+            <span className="text-xs font-semibold text-gray-500 dark:text-[#888888] tracking-wide">BibleYes</span>
           </div>
 
-          <div className="h-24 w-px bg-gray-200" />
+          <div className="h-24 w-px bg-gray-200 dark:bg-[#2a2a2a]" />
 
           <div className="flex flex-col items-center gap-2">
-            <div className="rounded-2xl border border-gray-200 p-2 bg-white shadow-sm">
+            <div className="rounded-2xl border border-gray-200 dark:border-[#333333] p-2 bg-white dark:bg-[#1c1c1c] shadow-sm">
               <Image
                 src={QR_URL}
                 alt="Scan to open BibleYes.com"
@@ -38,22 +38,22 @@ export default function AppCTA() {
                 unoptimized
               />
             </div>
-            <span className="text-xs font-semibold text-gray-500 tracking-wide uppercase">
+            <span className="text-xs font-semibold text-gray-500 dark:text-[#888888] tracking-wide uppercase">
               Scan to open
             </span>
           </div>
         </div>
 
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
           Read the Bible free on any device.
         </h2>
-        <p className="text-gray-500 text-sm mb-8">
+        <p className="text-gray-500 dark:text-[#888888] text-sm mb-8">
           Open BibleYes in your browser — no download needed. Free, clean, and ad-free.
         </p>
 
         <Link
           href="/bible/web/john/1"
-          className="inline-flex items-center gap-2 bg-gray-900 text-white rounded-full px-7 py-3 text-sm font-semibold hover:bg-gray-700 transition-colors"
+          className="inline-flex items-center gap-2 bg-gray-900 dark:bg-white text-white dark:text-black rounded-full px-7 py-3 text-sm font-semibold hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors"
         >
           Read the Bible Online
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

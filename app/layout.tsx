@@ -29,7 +29,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${lora.variable}`}>
-      <body className="font-sans antialiased bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 pb-16 sm:pb-0 transition-colors duration-200">
+      <body className="font-sans antialiased bg-white dark:bg-[#0f0f0f] text-gray-900 dark:text-white pb-16 sm:pb-0 transition-colors duration-200">
         <ThemeProvider>
           {children}
           <MobileNav />

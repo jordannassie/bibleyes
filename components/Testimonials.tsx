@@ -87,11 +87,11 @@ export default function Testimonials() {
   const t = TESTIMONIALS[active];
 
   return (
-    <section className="bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 py-20 px-4 transition-colors duration-200">
+    <section className="bg-white dark:bg-[#0f0f0f] border-t border-gray-100 dark:border-[#2a2a2a] py-20 px-4 transition-colors duration-200">
       <div className="max-w-3xl mx-auto text-center">
 
         {/* Eyebrow */}
-        <p className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-3">
+        <p className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-[#666666] mb-3">
           What people are saying
         </p>
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-12">
@@ -102,10 +102,10 @@ export default function Testimonials() {
         <div
           className={`transition-all duration-250 ${animating ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"}`}
         >
-          <div className="bg-gray-50 dark:bg-gray-800 rounded-3xl px-8 py-10 shadow-sm border border-gray-100 dark:border-gray-700 max-w-xl mx-auto">
+          <div className="bg-gray-50 dark:bg-[#1c1c1c] rounded-3xl px-8 py-10 shadow-sm border border-gray-100 dark:border-[#333333] max-w-xl mx-auto">
             <Stars />
 
-            <blockquote className="text-gray-800 dark:text-gray-200 text-lg font-serif leading-relaxed mb-8">
+            <blockquote className="text-gray-800 dark:text-white text-lg font-serif leading-relaxed mb-8">
               &ldquo;{t.quote}&rdquo;
             </blockquote>
 
@@ -115,7 +115,7 @@ export default function Testimonials() {
               </div>
               <div className="text-left">
                 <p className="text-sm font-semibold text-gray-900 dark:text-white">{t.name}</p>
-                <p className="text-xs text-gray-400 dark:text-gray-500">{t.location}</p>
+                <p className="text-xs text-gray-400 dark:text-[#666666]">{t.location}</p>
               </div>
             </div>
           </div>
@@ -131,7 +131,7 @@ export default function Testimonials() {
               className={`rounded-full transition-all duration-300 ${
                 i === active
                   ? "w-6 h-2.5 bg-gray-900 dark:bg-white"
-                  : "w-2.5 h-2.5 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500"
+                  : "w-2.5 h-2.5 bg-gray-300 dark:bg-[#444444] hover:bg-gray-400 dark:hover:bg-[#666666]"
               }`}
             />
           ))}
@@ -141,7 +141,7 @@ export default function Testimonials() {
         <div className="flex items-center justify-center gap-3 mt-6">
           <button
             onClick={() => goTo((active - 1 + TESTIMONIALS.length) % TESTIMONIALS.length)}
-            className="p-2.5 rounded-full border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            className="p-2.5 rounded-full border border-gray-200 dark:border-[#333333] text-gray-500 dark:text-[#888888] hover:bg-gray-100 dark:hover:bg-[#222222] transition-colors"
             aria-label="Previous"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -150,7 +150,7 @@ export default function Testimonials() {
           </button>
           <button
             onClick={() => goTo((active + 1) % TESTIMONIALS.length)}
-            className="p-2.5 rounded-full border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            className="p-2.5 rounded-full border border-gray-200 dark:border-[#333333] text-gray-500 dark:text-[#888888] hover:bg-gray-100 dark:hover:bg-[#222222] transition-colors"
             aria-label="Next"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

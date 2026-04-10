@@ -61,7 +61,7 @@ export default async function BibleReaderPage({
   const chapterText = data ? extractChapterText(data) : "";
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-white dark:bg-[#0f0f0f] flex flex-col transition-colors duration-200">
       <Header />
 
       <ReaderControls
