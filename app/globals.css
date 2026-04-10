@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Tailwind v4: class-based dark mode — applies when html has .dark class */
+@custom-variant dark (&:is(.dark *));
+
 :root {
   --font-inter: 'Inter', system-ui, sans-serif;
   --font-lora: 'Lora', Georgia, serif;

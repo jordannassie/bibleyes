@@ -14,24 +14,30 @@ export function useTheme() {
 }
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
+  // Always start with light — avoids SSR/hydration mismatch
   const [theme, setTheme] = useState<Theme>("light");
 
-  // On mount: read saved preference or system preference
+  // After mount, read saved preference (default: light)
   useEffect(() => {
     const saved = localStorage.getItem("bibleyes-theme") as Theme | null;
-    if (saved === "dark" || saved === "light") {
-      setTheme(saved);
-      document.documentElement.classList.toggle("dark", saved === "dark");
-    } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    if (saved === "dark") {
       setTheme("dark");
       document.documentElement.classList.add("dark");
+    } else {
+      // Default to light — remove dark class if somehow present
+      setTheme("light");
+      document.documentElement.classList.remove("dark");
     }
   }, []);
 
   function toggle() {
     setTheme((prev) => {
       const next = prev === "light" ? "dark" : "light";
-      document.documentElement.classList.toggle("dark", next === "dark");
+      if (next === "dark") {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
       localStorage.setItem("bibleyes-theme", next);
       return next;
     });
