@@ -1,8 +1,24 @@
 import { createBrowserClient } from "@supabase/ssr";
 
+function getEnv() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!url || url.includes("placeholder")) {
+    throw new Error(
+      "Missing NEXT_PUBLIC_SUPABASE_URL — add it to .env.local (see .env.example)"
+    );
+  }
+  if (!key || key.includes("placeholder")) {
+    throw new Error(
+      "Missing NEXT_PUBLIC_SUPABASE_ANON_KEY — add it to .env.local (see .env.example)"
+    );
+  }
+
+  return { url, key };
+}
+
 export function createClient() {
-  return createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+  const { url, key } = getEnv();
+  return createBrowserClient(url, key);
 }

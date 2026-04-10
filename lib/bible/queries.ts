@@ -13,7 +13,13 @@ import type {
 
 function isSupabaseConfigured(): boolean {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
-  return url.length > 0 && !url.includes("placeholder");
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
+  return (
+    url.startsWith("https://") &&
+    !url.includes("placeholder") &&
+    key.length > 20 &&
+    !key.includes("placeholder")
+  );
 }
 
 function groupVersesIntoSections(verses: DbVerse[]): ChapterSection[] {
