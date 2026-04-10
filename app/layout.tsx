@@ -3,6 +3,7 @@ import { Inter, Lora } from "next/font/google";
 import "./globals.css";
 import MobileNav from "@/components/MobileNav";
 import ThemeProvider from "@/components/ThemeProvider";
+import { GuideProvider } from "@/components/GuideContext";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -31,8 +32,10 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${lora.variable}`}>
       <body className="font-sans antialiased bg-white dark:bg-[#0f0f0f] text-gray-900 dark:text-white pb-16 sm:pb-0 transition-colors duration-200">
         <ThemeProvider>
-          {children}
-          <MobileNav />
+          <GuideProvider>
+            {children}
+            <MobileNav />
+          </GuideProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -3,6 +3,9 @@
 import { useState, useRef, useEffect } from "react";
 import type { ChatMessage, AIResponse } from "@/lib/ai/types";
 import { QUICK_ACTION_DEFS } from "@/lib/ai/types";
+import { useGuide } from "@/components/GuideContext";
+import { GUIDES, guideAvatarUrl } from "@/lib/ai/guides";
+import type { GuideId } from "@/lib/ai/guides";
 
 // SVG icons for each quick action (no emojis)
 const ACTION_ICONS: Record<string, React.ReactNode> = {
@@ -53,7 +56,9 @@ export default function AIAssistantDrawer({
   translation,
   chapterText,
 }: Props) {
+  const { selectedGuide, setGuideById } = useGuide();
   const [isOpen, setIsOpen] = useState(false);
+  const [showGuidePicker, setShowGuidePicker] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -97,6 +102,7 @@ export default function AIAssistantDrawer({
           translation,
           chapterText,
           question,
+          guideId: selectedGuide.id,
         }),
       });
 
@@ -135,26 +141,89 @@ export default function AIAssistantDrawer({
           w-full sm:w-[480px]
           ${isOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0 pointer-events-none"}`}
       >
-        {/* ── Header ── */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 flex-shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gray-900 flex items-center justify-center">
-              <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
-                  d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-              </svg>
+        {/* ── Guide picker panel (slides down) ── */}
+        {showGuidePicker && (
+          <div className="absolute inset-x-0 top-0 z-10 bg-white border-b border-gray-200 shadow-xl rounded-b-2xl px-4 pt-4 pb-5">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-xs font-bold uppercase tracking-wider text-gray-500">Switch guide</p>
+              <button
+                onClick={() => setShowGuidePicker(false)}
+                className="p-1.5 rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
             </div>
-            <div>
-              <p className="text-sm font-semibold text-gray-900">BibleYes AI</p>
-              <p className="text-[11px] text-gray-400 leading-none mt-0.5">
-                {bookName} {chapter} · {translation.toUpperCase()}
-              </p>
+            <div className="grid grid-cols-2 gap-2">
+              {GUIDES.map((g) => {
+                const isActive = g.id === selectedGuide.id;
+                return (
+                  <button
+                    key={g.id}
+                    onClick={() => {
+                      setGuideById(g.id as GuideId);
+                      setShowGuidePicker(false);
+                      setMessages([]);
+                    }}
+                    className={`flex items-center gap-2.5 p-2.5 rounded-xl border text-left transition-all ${
+                      isActive
+                        ? "border-gray-900 bg-gray-50"
+                        : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                    }`}
+                  >
+                    <div className="w-9 h-9 rounded-xl overflow-hidden flex-shrink-0">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={guideAvatarUrl(g.avatarSeed)} alt="" className="w-full h-full object-cover" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-xs font-semibold text-gray-900 truncate">{g.name}</p>
+                      <p className="text-[10px] text-gray-500 truncate">{g.title}</p>
+                    </div>
+                    {isActive && (
+                      <svg className="w-3.5 h-3.5 text-gray-900 ml-auto flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                      </svg>
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </div>
+        )}
+
+        {/* ── Header ── */}
+        <div className="flex items-center justify-between px-4 py-3.5 border-b border-gray-100 flex-shrink-0">
+          {/* Guide identity */}
+          <button
+            onClick={() => setShowGuidePicker((v) => !v)}
+            className="flex items-center gap-3 group flex-1 min-w-0 text-left"
+            aria-label="Switch guide"
+          >
+            <div className="w-9 h-9 rounded-xl overflow-hidden flex-shrink-0 ring-2 ring-gray-100 group-hover:ring-gray-300 transition-all">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={guideAvatarUrl(selectedGuide.avatarSeed)}
+                alt={`${selectedGuide.name} guide`}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5">
+                <p className="text-sm font-semibold text-gray-900 truncate">{selectedGuide.name}</p>
+                <svg className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+              <p className="text-[11px] text-gray-400 leading-none mt-0.5 truncate">
+                {selectedGuide.title} · {bookName} {chapter}
+              </p>
+            </div>
+          </button>
 
           <button
             onClick={() => setIsOpen(false)}
-            className="p-2 rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+            className="flex-shrink-0 p-2 rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors ml-2"
             aria-label="Close"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -169,17 +238,25 @@ export default function AIAssistantDrawer({
           {/* Empty state */}
           {messages.length === 0 && !loading && (
             <div className="flex flex-col items-center text-center pt-6 pb-4 px-2">
-              <div className="w-16 h-16 rounded-2xl bg-gray-900 flex items-center justify-center mb-5">
-                <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
+              {/* Guide avatar (large) */}
+              <div className="w-16 h-16 rounded-2xl overflow-hidden mb-4 ring-2 ring-gray-100 shadow-md">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={guideAvatarUrl(selectedGuide.avatarSeed)}
+                  alt={selectedGuide.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="flex items-center gap-1.5 mb-1">
+                <p className="text-xs font-bold uppercase tracking-wider text-gray-400">
+                  {selectedGuide.title}
+                </p>
               </div>
               <h3 className="text-base font-semibold text-gray-900 mb-2">
-                Ask about {bookName} {chapter}
+                {`Hi, I'm ${selectedGuide.name}`}
               </h3>
               <p className="text-sm text-gray-500 leading-relaxed mb-6 max-w-xs">
-                Get Bible-based answers, summaries, cross references, and practical application — from a Christian perspective.
+                {selectedGuide.description} Ask me anything about {bookName} {chapter}.
               </p>
 
               {/* Quick actions */}
