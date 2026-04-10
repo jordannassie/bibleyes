@@ -26,17 +26,21 @@ export default function AIAssistantDrawer({
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
+  // Listen for header AI button toggle
   useEffect(() => {
-    if (isOpen) {
-      setTimeout(() => inputRef.current?.focus(), 300);
-    }
+    const handler = () => setIsOpen((prev) => !prev);
+    window.addEventListener("bibleyes:toggle-ai", handler);
+    return () => window.removeEventListener("bibleyes:toggle-ai", handler);
+  }, []);
+
+  useEffect(() => {
+    if (isOpen) setTimeout(() => inputRef.current?.focus(), 300);
   }, [isOpen]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
 
-  // Reset messages when chapter changes
   useEffect(() => {
     setMessages([]);
   }, [bookSlug, chapter]);
@@ -45,8 +49,7 @@ export default function AIAssistantDrawer({
     if (!question.trim() || loading) return;
     setInput("");
 
-    const userMsg: ChatMessage = { role: "user", content: question };
-    setMessages((prev) => [...prev, userMsg]);
+    setMessages((prev) => [...prev, { role: "user", content: question }]);
     setLoading(true);
 
     try {
@@ -82,60 +85,43 @@ export default function AIAssistantDrawer({
     }
   }
 
-  const panelClasses = isOpen
-    ? "translate-x-0 opacity-100"
-    : "translate-x-full opacity-0 pointer-events-none";
-
   return (
     <>
-      {/* Overlay (mobile) */}
+      {/* Backdrop */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/20 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/40 z-40 lg:hidden"
           onClick={() => setIsOpen(false)}
         />
       )}
 
-      {/* Toggle tab — right edge */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        aria-label={isOpen ? "Close AI Assistant" : "Open AI Assistant"}
-        className={`fixed right-0 top-1/2 -translate-y-1/2 z-50 flex flex-col items-center gap-1 bg-gray-900 text-white text-[10px] font-bold tracking-wider rounded-l-xl px-2 py-4 shadow-lg hover:bg-gray-700 transition-all ${
-          isOpen ? "opacity-0 pointer-events-none" : "opacity-100"
-        }`}
-      >
-        <svg className="w-4 h-4 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-        </svg>
-        <span style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
-          AI
-        </span>
-      </button>
-
-      {/* Drawer panel */}
+      {/* Drawer */}
       <div
-        className={`fixed right-0 top-0 h-full z-50 flex flex-col bg-white border-l border-gray-200 shadow-2xl transition-all duration-300 ease-in-out
-          w-full sm:w-[420px]
-          ${panelClasses}`}
+        className={`fixed right-0 top-0 h-full z-50 flex flex-col bg-gray-950 transition-all duration-300 ease-in-out
+          w-full sm:w-[480px]
+          ${isOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0 pointer-events-none"}`}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 flex-shrink-0">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-gray-900 flex items-center justify-center">
-              <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+        {/* ── Header ── */}
+        <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 flex-shrink-0">
+          <div className="flex items-center gap-3">
+            {/* Bot icon */}
+            <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center">
+              <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
+                  d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
               </svg>
             </div>
             <div>
-              <p className="text-sm font-semibold text-gray-900">BibleYes AI</p>
-              <p className="text-[10px] text-gray-400 leading-none">
+              <p className="text-sm font-semibold text-white">BibleYes AI</p>
+              <p className="text-[11px] text-white/40 leading-none mt-0.5">
                 {bookName} {chapter} · {translation.toUpperCase()}
               </p>
             </div>
           </div>
+
           <button
             onClick={() => setIsOpen(false)}
-            className="p-1.5 rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+            className="p-2 rounded-full text-white/40 hover:text-white hover:bg-white/10 transition-colors"
             aria-label="Close"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -144,30 +130,32 @@ export default function AIAssistantDrawer({
           </button>
         </div>
 
-        {/* Messages area */}
-        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
+        {/* ── Messages ── */}
+        <div className="flex-1 overflow-y-auto px-4 py-5 space-y-5">
+
           {/* Empty state */}
           {messages.length === 0 && !loading && (
-            <div className="flex flex-col items-center text-center py-8 px-2">
-              <div className="w-12 h-12 rounded-2xl bg-gray-900 flex items-center justify-center mb-4">
-                <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            <div className="flex flex-col items-center text-center pt-6 pb-4 px-2">
+              <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center mb-5">
+                <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
               </div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-1">
+              <h3 className="text-base font-semibold text-white mb-2">
                 Ask about {bookName} {chapter}
               </h3>
-              <p className="text-xs text-gray-500 leading-relaxed mb-5 max-w-xs">
-                Get Bible-based answers, summaries, cross references, and practical application — all from a Christian perspective.
+              <p className="text-sm text-white/50 leading-relaxed mb-6 max-w-xs">
+                Get Bible-based answers, summaries, cross references, and practical application — from a Christian perspective.
               </p>
 
-              {/* Quick action pills */}
+              {/* Quick actions */}
               <div className="flex flex-wrap justify-center gap-2 w-full">
                 {QUICK_ACTIONS.map((action) => (
                   <button
                     key={action.label}
                     onClick={() => sendMessage(action.buildQuestion(bookName, chapter))}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-colors"
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm font-medium transition-colors border border-white/10"
                   >
                     <span>{action.icon}</span>
                     {action.label}
@@ -177,12 +165,12 @@ export default function AIAssistantDrawer({
             </div>
           )}
 
-          {/* Chat messages */}
+          {/* Messages */}
           {messages.map((msg, i) => {
             if (msg.role === "user") {
               return (
                 <div key={i} className="flex justify-end">
-                  <div className="max-w-[85%] bg-gray-900 text-white rounded-2xl rounded-tr-sm px-4 py-2.5 text-sm leading-relaxed">
+                  <div className="max-w-[85%] bg-white text-gray-900 rounded-2xl rounded-tr-sm px-4 py-3 text-sm leading-relaxed font-medium">
                     {msg.content}
                   </div>
                 </div>
@@ -192,7 +180,7 @@ export default function AIAssistantDrawer({
             if (msg.role === "error") {
               return (
                 <div key={i} className="flex justify-start">
-                  <div className="max-w-[85%] bg-red-50 border border-red-100 text-red-700 rounded-2xl rounded-tl-sm px-4 py-2.5 text-sm">
+                  <div className="max-w-[85%] bg-red-900/40 border border-red-500/30 text-red-300 rounded-2xl rounded-tl-sm px-4 py-3 text-sm">
                     {msg.content}
                   </div>
                 </div>
@@ -203,9 +191,9 @@ export default function AIAssistantDrawer({
             return (
               <div key={i} className="flex justify-start">
                 <div className="max-w-[95%] space-y-3">
-                  {/* Answer */}
-                  <div className="bg-gray-50 border border-gray-100 rounded-2xl rounded-tl-sm px-4 py-3">
-                    <p className="text-sm text-gray-800 leading-relaxed whitespace-pre-wrap">
+                  <div className="bg-white/8 border border-white/10 rounded-2xl rounded-tl-sm px-4 py-4"
+                    style={{ backgroundColor: "rgba(255,255,255,0.06)" }}>
+                    <p className="text-sm text-white/90 leading-[1.75] whitespace-pre-wrap">
                       {msg.answer}
                     </p>
                   </div>
@@ -214,32 +202,22 @@ export default function AIAssistantDrawer({
                   {(msg.keyVerses?.length > 0 || msg.relatedReferences?.length > 0) && (
                     <div className="flex flex-wrap gap-1.5 px-1">
                       {msg.keyVerses?.map((ref, j) => (
-                        <span
-                          key={`kv-${j}`}
-                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 text-[10px] font-semibold border border-blue-100"
-                        >
-                          <svg className="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
-                          </svg>
-                          {ref}
+                        <span key={`kv-${j}`}
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-blue-500/20 text-blue-300 text-[11px] font-semibold border border-blue-400/20">
+                          📖 {ref}
                         </span>
                       ))}
                       {msg.relatedReferences?.map((ref, j) => (
-                        <span
-                          key={`rr-${j}`}
-                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 text-[10px] font-medium border border-gray-200"
-                        >
+                        <span key={`rr-${j}`}
+                          className="inline-flex items-center px-2.5 py-1 rounded-full bg-white/10 text-white/50 text-[11px] font-medium border border-white/10">
                           {ref}
                         </span>
                       ))}
                     </div>
                   )}
 
-                  {/* Disclaimer */}
                   {msg.disclaimer && (
-                    <p className="text-[10px] text-gray-400 italic px-1">
-                      {msg.disclaimer}
-                    </p>
+                    <p className="text-[11px] text-white/30 italic px-1">{msg.disclaimer}</p>
                   )}
 
                   {/* Follow-up quick actions */}
@@ -249,7 +227,8 @@ export default function AIAssistantDrawer({
                         <button
                           key={action.label}
                           onClick={() => sendMessage(action.buildQuestion(bookName, chapter))}
-                          className="px-2.5 py-1 rounded-full border border-gray-200 text-[10px] font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+                          className="px-3 py-1.5 rounded-full bg-white/8 hover:bg-white/15 text-white/60 hover:text-white text-[11px] font-medium border border-white/10 transition-colors"
+                          style={{ backgroundColor: "rgba(255,255,255,0.06)" }}
                         >
                           {action.label}
                         </button>
@@ -261,17 +240,15 @@ export default function AIAssistantDrawer({
             );
           })}
 
-          {/* Loading indicator */}
+          {/* Loading dots */}
           {loading && (
             <div className="flex justify-start">
-              <div className="bg-gray-50 border border-gray-100 rounded-2xl rounded-tl-sm px-4 py-3">
+              <div className="bg-white/8 border border-white/10 rounded-2xl rounded-tl-sm px-5 py-4"
+                style={{ backgroundColor: "rgba(255,255,255,0.06)" }}>
                 <div className="flex items-center gap-1.5">
                   {[0, 1, 2].map((i) => (
-                    <div
-                      key={i}
-                      className="w-2 h-2 rounded-full bg-gray-400 animate-bounce"
-                      style={{ animationDelay: `${i * 0.15}s` }}
-                    />
+                    <div key={i} className="w-2 h-2 rounded-full bg-white/40 animate-bounce"
+                      style={{ animationDelay: `${i * 0.15}s` }} />
                   ))}
                 </div>
               </div>
@@ -281,8 +258,8 @@ export default function AIAssistantDrawer({
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input area */}
-        <div className="flex-shrink-0 border-t border-gray-100 px-4 py-3 bg-white">
+        {/* ── Input ── */}
+        <div className="flex-shrink-0 border-t border-white/10 px-4 py-4 bg-gray-950">
           <div className="flex items-end gap-2">
             <textarea
               ref={inputRef}
@@ -291,8 +268,8 @@ export default function AIAssistantDrawer({
               onKeyDown={handleKeyDown}
               placeholder={`Ask about ${bookName} ${chapter}...`}
               rows={1}
-              className="flex-1 resize-none rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm text-gray-900 placeholder-gray-400 outline-none focus:border-gray-400 focus:bg-white transition-colors max-h-32 leading-relaxed"
-              style={{ minHeight: "40px" }}
+              className="flex-1 resize-none rounded-xl border border-white/10 bg-white/8 px-4 py-3 text-sm text-white placeholder-white/30 outline-none focus:border-white/25 focus:bg-white/10 transition-colors max-h-32 leading-relaxed"
+              style={{ minHeight: "44px", backgroundColor: "rgba(255,255,255,0.06)" }}
               onInput={(e) => {
                 const el = e.currentTarget;
                 el.style.height = "auto";
@@ -302,14 +279,14 @@ export default function AIAssistantDrawer({
             <button
               onClick={() => sendMessage(input)}
               disabled={!input.trim() || loading}
-              className="flex-shrink-0 w-10 h-10 rounded-xl bg-gray-900 text-white flex items-center justify-center hover:bg-gray-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="flex-shrink-0 w-11 h-11 rounded-xl bg-white text-gray-900 flex items-center justify-center hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors font-bold"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
               </svg>
             </button>
           </div>
-          <p className="text-[10px] text-gray-400 text-center mt-2">
+          <p className="text-[10px] text-white/25 text-center mt-2.5">
             Bible-based answers only · Not a substitute for pastoral guidance
           </p>
         </div>
