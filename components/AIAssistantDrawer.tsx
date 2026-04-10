@@ -2,7 +2,41 @@
 
 import { useState, useRef, useEffect } from "react";
 import type { ChatMessage, AIResponse } from "@/lib/ai/types";
-import { QUICK_ACTIONS } from "@/lib/ai/types";
+import { QUICK_ACTION_DEFS } from "@/lib/ai/types";
+
+// SVG icons for each quick action (no emojis)
+const ACTION_ICONS: Record<string, React.ReactNode> = {
+  "Explain": (
+    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+    </svg>
+  ),
+  "Summarize": (
+    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+        d="M4 6h16M4 10h16M4 14h10M4 18h7" />
+    </svg>
+  ),
+  "Cross references": (
+    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+        d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+    </svg>
+  ),
+  "Apply today": (
+    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+  ),
+  "Commentary": (
+    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+        d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+    </svg>
+  ),
+};
 
 type Props = {
   bookSlug: string;
@@ -151,13 +185,13 @@ export default function AIAssistantDrawer({
 
               {/* Quick actions */}
               <div className="flex flex-wrap justify-center gap-2 w-full">
-                {QUICK_ACTIONS.map((action) => (
+                {QUICK_ACTION_DEFS.map((action) => (
                   <button
                     key={action.label}
                     onClick={() => sendMessage(action.buildQuestion(bookName, chapter))}
                     className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm font-medium transition-colors border border-white/10"
                   >
-                    <span>{action.icon}</span>
+                    <span className="text-white/60">{ACTION_ICONS[action.label]}</span>
                     {action.label}
                   </button>
                 ))}
@@ -203,8 +237,12 @@ export default function AIAssistantDrawer({
                     <div className="flex flex-wrap gap-1.5 px-1">
                       {msg.keyVerses?.map((ref, j) => (
                         <span key={`kv-${j}`}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-blue-500/20 text-blue-300 text-[11px] font-semibold border border-blue-400/20">
-                          📖 {ref}
+                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-500/20 text-blue-300 text-[11px] font-semibold border border-blue-400/20">
+                          <svg className="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                          </svg>
+                          {ref}
                         </span>
                       ))}
                       {msg.relatedReferences?.map((ref, j) => (
@@ -223,13 +261,14 @@ export default function AIAssistantDrawer({
                   {/* Follow-up quick actions */}
                   {i === messages.length - 1 && (
                     <div className="flex flex-wrap gap-1.5 px-1">
-                      {QUICK_ACTIONS.slice(0, 3).map((action) => (
+                      {QUICK_ACTION_DEFS.slice(0, 3).map((action) => (
                         <button
                           key={action.label}
                           onClick={() => sendMessage(action.buildQuestion(bookName, chapter))}
-                          className="px-3 py-1.5 rounded-full bg-white/8 hover:bg-white/15 text-white/60 hover:text-white text-[11px] font-medium border border-white/10 transition-colors"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 hover:bg-white/15 text-white/60 hover:text-white text-[11px] font-medium border border-white/10 transition-colors"
                           style={{ backgroundColor: "rgba(255,255,255,0.06)" }}
                         >
+                          <span className="opacity-60">{ACTION_ICONS[action.label]}</span>
                           {action.label}
                         </button>
                       ))}

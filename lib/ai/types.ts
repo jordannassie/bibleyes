@@ -21,36 +21,30 @@ export type ChatMessage =
   | ({ role: "assistant" } & AIResponse)
   | { role: "error"; content: string };
 
-export type QuickAction = {
+export type QuickActionDef = {
   label: string;
-  icon: string;
   buildQuestion: (bookName: string, chapter: number) => string;
 };
 
-export const QUICK_ACTIONS: QuickAction[] = [
+export const QUICK_ACTION_DEFS: QuickActionDef[] = [
   {
     label: "Explain",
-    icon: "📖",
     buildQuestion: (b, c) => `What does ${b} chapter ${c} mean and teach us?`,
   },
   {
     label: "Summarize",
-    icon: "✦",
     buildQuestion: (b, c) => `Please summarize ${b} chapter ${c} in simple, clear terms.`,
   },
   {
     label: "Cross references",
-    icon: "🔗",
     buildQuestion: (b, c) => `What are the key cross references and related passages for ${b} chapter ${c}?`,
   },
   {
     label: "Apply today",
-    icon: "🌱",
     buildQuestion: (b, c) => `How can I practically apply the lessons from ${b} chapter ${c} to my daily life?`,
   },
   {
     label: "Commentary",
-    icon: "💬",
     buildQuestion: (b, c) => `Provide theological commentary and historical context for ${b} chapter ${c}.`,
   },
 ];
