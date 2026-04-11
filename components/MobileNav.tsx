@@ -1,10 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function MobileNav() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  function handleAIClick() {
+    if (pathname.startsWith("/bible")) {
+      window.dispatchEvent(new CustomEvent("bibleyes:toggle-ai"));
+    } else {
+      router.push("/bible/web/john/1?ai=open");
+    }
+  }
 
   const isActive = (prefix: string) =>
     prefix === "/" ? pathname === "/" : pathname.startsWith(prefix);
@@ -43,7 +52,7 @@ export default function MobileNav() {
 
       {/* AI */}
       <button
-        onClick={() => window.dispatchEvent(new CustomEvent("bibleyes:toggle-ai"))}
+        onClick={handleAIClick}
         className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold tracking-wide text-gray-400 dark:text-[#666666] hover:text-gray-600 dark:hover:text-[#e5e5e5] transition-colors"
       >
         <span className="w-5 h-5 rounded-full bg-gray-900 dark:bg-white flex items-center justify-center">

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import SearchBar from "./SearchBar";
 import { useTheme } from "./ThemeProvider";
 
@@ -12,6 +13,16 @@ const LOGO_URL =
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { theme, toggle } = useTheme();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  function handleAIClick() {
+    if (pathname.startsWith("/bible")) {
+      window.dispatchEvent(new CustomEvent("bibleyes:toggle-ai"));
+    } else {
+      router.push("/bible/web/john/1?ai=open");
+    }
+  }
 
   return (
     <header className="sticky top-0 z-50 bg-white dark:bg-[#141414] border-b border-gray-200 dark:border-[#2a2a2a] transition-colors duration-200">
@@ -33,19 +44,20 @@ export default function Header() {
 
           {/* Nav links */}
           <nav className="hidden md:flex items-center gap-1 ml-2">
-            {[
-              { label: "Bible", href: "/bible/web/john/1" },
-              { label: "Plans", href: "#" },
-              { label: "Topics", href: "#" },
-            ].map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className="px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-[#888888] hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#222222] rounded-md transition-colors"
-              >
-                {item.label}
-              </Link>
-            ))}
+            <Link
+              href="/bible/web/john/1"
+              className="px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-[#888888] hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#222222] rounded-md transition-colors"
+            >
+              Bible
+            </Link>
+            <a
+              href="https://1billion.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-[#888888] hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#222222] rounded-md transition-colors"
+            >
+              Evangelism
+            </a>
           </nav>
 
           {/* Search bar */}
@@ -57,7 +69,7 @@ export default function Header() {
           <div className="flex items-center gap-1 ml-auto flex-shrink-0">
             {/* AI toggle */}
             <button
-              onClick={() => window.dispatchEvent(new CustomEvent("bibleyes:toggle-ai"))}
+              onClick={handleAIClick}
               className="inline-flex items-center gap-2 bg-gray-900 dark:bg-white hover:bg-gray-700 dark:hover:bg-gray-100 text-white dark:text-gray-900 px-4 py-2 rounded-full text-sm font-semibold transition-colors shadow-sm"
               aria-label="Open AI Assistant"
             >

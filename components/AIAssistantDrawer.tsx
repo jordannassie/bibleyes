@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import type { ChatMessage, AIResponse } from "@/lib/ai/types";
 import { QUICK_ACTION_DEFS } from "@/lib/ai/types";
 
@@ -53,12 +54,28 @@ export default function AIAssistantDrawer({
   translation,
   chapterText,
 }: Props) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  // Auto-open when navigated here with ?ai=open
+  useEffect(() => {
+    if (searchParams.get("ai") === "open") {
+      setIsOpen(true);
+      // Remove the param from the URL without a page reload
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete("ai");
+      const newUrl = params.size > 0 ? `${pathname}?${params}` : pathname;
+      router.replace(newUrl, { scroll: false });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Listen for header AI button toggle
   useEffect(() => {
