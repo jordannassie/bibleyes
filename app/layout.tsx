@@ -20,6 +20,34 @@ export const metadata: Metadata = {
   title: "BibleYes — Read the Bible with clarity",
   description:
     "A clean, modern Bible reading experience. Read, search, highlight, and reflect on scripture.",
+  icons: {
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
+  },
+  openGraph: {
+    title: "BibleYes — Read the Bible with clarity",
+    description:
+      "A clean, distraction-free Bible reading experience with AI-powered study tools.",
+    url: "https://bibleyes.com",
+    siteName: "BibleYes",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1024,
+        height: 1024,
+        alt: "BibleYes — Holy Bible",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "BibleYes — Read the Bible with clarity",
+    description:
+      "A clean, distraction-free Bible reading experience with AI-powered study tools.",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({
