@@ -70,64 +70,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* AI Bible Assistant — blue section */}
-        <section className="py-24 px-4" style={{ background: "linear-gradient(135deg, #0f2a5e 0%, #1a3a7c 40%, #0d1f4a 100%)" }}>
-          <div className="max-w-3xl mx-auto text-center">
-
-            {/* Chat icon */}
-            <div className="flex justify-center mb-8">
-              <div className="w-20 h-20 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center shadow-2xl">
-                <svg className="w-10 h-10 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6}
-                    d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                </svg>
-              </div>
-            </div>
-
-            <p className="text-xs font-bold uppercase tracking-widest text-blue-300 mb-3">
-              AI Assistant
-            </p>
-            <h2 className="text-3xl sm:text-4xl font-bold text-white leading-tight mb-4">
-              Ask anything about Scripture.
-            </h2>
-            <p className="text-lg text-blue-200/80 mb-10 max-w-xl mx-auto leading-relaxed">
-              Get Bible-based answers, chapter summaries, cross-references, and commentary — all from a Christian perspective. Powered by AI, grounded in the Word.
-            </p>
-
-            {/* Sample prompts */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl mx-auto mb-10 text-left">
-              {[
-                "What does John 3:16 mean?",
-                "Summarize the book of Romans",
-                "What are cross-references for Psalm 23?",
-                "How can I apply this verse today?",
-              ].map((q) => (
-                <Link
-                  key={q}
-                  href="/bible/web/john/1"
-                  className="flex items-center gap-3 bg-white/8 hover:bg-white/15 border border-white/15 rounded-xl px-4 py-3 text-sm text-white/80 hover:text-white transition-colors"
-                >
-                  <svg className="w-4 h-4 text-blue-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  {q}
-                </Link>
-              ))}
-            </div>
-
-            <Link
-              href="/bible/web/john/1"
-              className="inline-flex items-center gap-2 bg-white text-blue-900 rounded-full px-8 py-3.5 text-sm font-bold hover:bg-blue-50 transition-colors shadow-lg"
-            >
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                  d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-              </svg>
-              Open AI Assistant
-            </Link>
-          </div>
-        </section>
-
         <Testimonials />
         <AppCTA />
         <FeatureCards />

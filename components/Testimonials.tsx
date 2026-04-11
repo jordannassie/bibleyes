@@ -6,48 +6,42 @@ const TESTIMONIALS = [
   {
     name: "Sarah M.",
     location: "Texas",
-    avatar: "SM",
-    color: "bg-blue-500",
+    photo: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=faces&auto=format&q=80",
     quote:
       "BibleYes completely changed how I do my morning devotions. The AI explains passages in a way I've never heard before — like having a Bible scholar right beside me.",
   },
   {
     name: "Marcus T.",
     location: "Georgia",
-    avatar: "MT",
-    color: "bg-emerald-500",
+    photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=faces&auto=format&q=80",
     quote:
       "I've tried every Bible app out there. BibleYes is the cleanest, most beautiful reading experience I've found. The AI assistant is incredible — it actually quotes Scripture back to you.",
   },
   {
     name: "Priya K.",
     location: "California",
-    avatar: "PK",
-    color: "bg-purple-500",
+    photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop&crop=faces&auto=format&q=80",
     quote:
       "As a new believer, I was intimidated by the Bible. BibleYes AI helped me understand Romans 8 in a way that made me weep. Truly a blessing.",
   },
   {
     name: "David R.",
     location: "Florida",
-    avatar: "DR",
-    color: "bg-orange-500",
+    photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=faces&auto=format&q=80",
     quote:
       "The cross-reference feature in the AI is next level. I asked about Psalm 23 and it connected it to John 10 in a way that deepened my faith instantly.",
   },
   {
     name: "Amanda L.",
     location: "Ohio",
-    avatar: "AL",
-    color: "bg-rose-500",
+    photo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=faces&auto=format&q=80",
     quote:
       "Clean, fast, no ads. I use BibleYes every single day — on my phone, laptop, everywhere. The dark mode is gorgeous and the AI is spot on.",
   },
   {
     name: "Pastor James W.",
     location: "North Carolina",
-    avatar: "JW",
-    color: "bg-indigo-500",
+    photo: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=faces&auto=format&q=80",
     quote:
       "I recommend BibleYes to my congregation. The AI stays true to Scripture and gives well-grounded, Christian answers. This is what technology in the church should look like.",
   },
@@ -110,8 +104,9 @@ export default function Testimonials() {
             </blockquote>
 
             <div className="flex items-center justify-center gap-3">
-              <div className={`w-10 h-10 rounded-full ${t.color} flex items-center justify-center flex-shrink-0`}>
-                <span className="text-white text-xs font-bold">{t.avatar}</span>
+              <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 ring-2 ring-gray-100 dark:ring-[#333333]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={t.photo} alt={t.name} className="w-full h-full object-cover" />
               </div>
               <div className="text-left">
                 <p className="text-sm font-semibold text-gray-900 dark:text-white">{t.name}</p>
