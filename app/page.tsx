@@ -6,6 +6,7 @@ import FeatureCards from "@/components/FeatureCards";
 import Footer from "@/components/Footer";
 import VerseOfDayShare from "@/components/VerseOfDayShare";
 import Testimonials from "@/components/Testimonials";
+import HowItWorks from "@/components/HowItWorks";
 
 const LOGO_URL =
   "https://dhuidtxkthlvkqyuxbkw.supabase.co/storage/v1/object/public/BibleYes/logos/ChatGPT%20Image%20Apr%2010,%202026,%2003_24_13%20PM.png";
@@ -70,6 +71,7 @@ export default function HomePage() {
           </div>
         </section>
 
+        <HowItWorks />
         <Testimonials />
         <AppCTA />
         <FeatureCards />
