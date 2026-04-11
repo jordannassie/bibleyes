@@ -3,9 +3,6 @@
 import { useState, useRef, useEffect } from "react";
 import type { ChatMessage, AIResponse } from "@/lib/ai/types";
 import { QUICK_ACTION_DEFS } from "@/lib/ai/types";
-import { useGuide } from "@/components/GuideContext";
-import { GUIDES, guideAvatarUrl } from "@/lib/ai/guides";
-import type { GuideId } from "@/lib/ai/guides";
 
 // SVG icons for each quick action (no emojis)
 const ACTION_ICONS: Record<string, React.ReactNode> = {
@@ -56,9 +53,7 @@ export default function AIAssistantDrawer({
   translation,
   chapterText,
 }: Props) {
-  const { selectedGuide, setGuideById } = useGuide();
   const [isOpen, setIsOpen] = useState(false);
-  const [showGuidePicker, setShowGuidePicker] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -102,7 +97,6 @@ export default function AIAssistantDrawer({
           translation,
           chapterText,
           question,
-          guideId: selectedGuide.id,
         }),
       });
 
@@ -141,85 +135,22 @@ export default function AIAssistantDrawer({
           w-full sm:w-[480px]
           ${isOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0 pointer-events-none"}`}
       >
-        {/* ── Guide picker panel (slides down) ── */}
-        {showGuidePicker && (
-          <div className="absolute inset-x-0 top-0 z-10 bg-white border-b border-gray-200 shadow-xl rounded-b-2xl px-4 pt-4 pb-5">
-            <div className="flex items-center justify-between mb-3">
-              <p className="text-xs font-bold uppercase tracking-wider text-gray-500">Switch guide</p>
-              <button
-                onClick={() => setShowGuidePicker(false)}
-                className="p-1.5 rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              {GUIDES.map((g) => {
-                const isActive = g.id === selectedGuide.id;
-                return (
-                  <button
-                    key={g.id}
-                    onClick={() => {
-                      setGuideById(g.id as GuideId);
-                      setShowGuidePicker(false);
-                      setMessages([]);
-                    }}
-                    className={`flex items-center gap-2.5 p-2.5 rounded-xl border text-left transition-all ${
-                      isActive
-                        ? "border-gray-900 bg-gray-50"
-                        : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
-                    }`}
-                  >
-                    <div className="w-9 h-9 rounded-xl overflow-hidden flex-shrink-0">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={guideAvatarUrl(g)} alt="" className="w-full h-full object-cover" />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-xs font-semibold text-gray-900 truncate">{g.name}</p>
-                      <p className="text-[10px] text-gray-500 truncate">{g.title}</p>
-                    </div>
-                    {isActive && (
-                      <svg className="w-3.5 h-3.5 text-gray-900 ml-auto flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                      </svg>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
         {/* ── Header ── */}
         <div className="flex items-center justify-between px-4 py-3.5 border-b border-gray-100 flex-shrink-0">
-          {/* Guide identity */}
-          <button
-            onClick={() => setShowGuidePicker((v) => !v)}
-            className="flex items-center gap-3 group flex-1 min-w-0 text-left"
-            aria-label="Switch guide"
-          >
-            <div className="w-9 h-9 rounded-xl overflow-hidden flex-shrink-0 ring-2 ring-gray-100 group-hover:ring-gray-300 transition-all">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={guideAvatarUrl(selectedGuide)}
-                alt={`${selectedGuide.name} guide`}
-                className="w-full h-full object-cover"
-              />
+          <div className="flex items-center gap-3 flex-1 min-w-0">
+            <div className="w-9 h-9 rounded-xl bg-gray-900 text-white flex items-center justify-center flex-shrink-0">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                  d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+              </svg>
             </div>
             <div className="min-w-0">
-              <div className="flex items-center gap-1.5">
-                <p className="text-sm font-semibold text-gray-900 truncate">{selectedGuide.name}</p>
-                <svg className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
+              <p className="text-sm font-semibold text-gray-900 truncate">BibleYes AI Assistant</p>
               <p className="text-[11px] text-gray-400 leading-none mt-0.5 truncate">
-                {selectedGuide.title} · {bookName} {chapter}
+                {bookName} {chapter}
               </p>
             </div>
-          </button>
+          </div>
 
           <button
             onClick={() => setIsOpen(false)}
@@ -238,25 +169,21 @@ export default function AIAssistantDrawer({
           {/* Empty state */}
           {messages.length === 0 && !loading && (
             <div className="flex flex-col items-center text-center pt-6 pb-4 px-2">
-              {/* Guide avatar (large) */}
-              <div className="w-16 h-16 rounded-2xl overflow-hidden mb-4 ring-2 ring-gray-100 shadow-md">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={guideAvatarUrl(selectedGuide)}
-                  alt={selectedGuide.name}
-                  className="w-full h-full object-cover"
-                />
+              <div className="w-16 h-16 rounded-2xl bg-gray-900 text-white flex items-center justify-center mb-4 shadow-md">
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6}
+                    d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                </svg>
               </div>
-              <div className="flex items-center gap-1.5 mb-1">
-                <p className="text-xs font-bold uppercase tracking-wider text-gray-400">
-                  {selectedGuide.title}
-                </p>
-              </div>
+              <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">
+                AI Assistant
+              </p>
               <h3 className="text-base font-semibold text-gray-900 mb-2">
-                {`Hi, I'm ${selectedGuide.name}`}
+                Ask about this chapter
               </h3>
               <p className="text-sm text-gray-500 leading-relaxed mb-6 max-w-xs">
-                {selectedGuide.description} Ask me anything about {bookName} {chapter}.
+                Bible-based answers from a Christian perspective. Ask me anything about {bookName}{" "}
+                {chapter}.
               </p>
 
               {/* Quick actions */}

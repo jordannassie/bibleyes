@@ -7,7 +7,6 @@ export type AIRequest = {
   verseNumber?: number;
   verseText?: string;
   question: string;
-  guideId?: string;
 };
 
 export type AIResponse = {

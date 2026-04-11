@@ -6,7 +6,6 @@ import FeatureCards from "@/components/FeatureCards";
 import Footer from "@/components/Footer";
 import VerseOfDayShare from "@/components/VerseOfDayShare";
 import Testimonials from "@/components/Testimonials";
-import GuideSelector from "@/components/GuideSelector";
 
 const LOGO_URL =
   "https://dhuidtxkthlvkqyuxbkw.supabase.co/storage/v1/object/public/BibleYes/logos/ChatGPT%20Image%20Apr%2010,%202026,%2003_24_13%20PM.png";
@@ -86,7 +85,7 @@ export default function HomePage() {
             </div>
 
             <p className="text-xs font-bold uppercase tracking-widest text-blue-300 mb-3">
-              AI Bible Assistant
+              AI Assistant
             </p>
             <h2 className="text-3xl sm:text-4xl font-bold text-white leading-tight mb-4">
               Ask anything about Scripture.
@@ -129,7 +128,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        <GuideSelector />
         <Testimonials />
         <AppCTA />
         <FeatureCards />

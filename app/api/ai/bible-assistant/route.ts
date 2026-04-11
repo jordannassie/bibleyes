@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 import type { AIRequest, AIResponse } from "@/lib/ai/types";
-import { getGuide, type GuideId } from "@/lib/ai/guides";
 
 const CORE_RULES = `You are the BibleYes AI Assistant — a Christian Bible study helper.
 
@@ -28,10 +27,10 @@ You must respond with a valid JSON object containing exactly these fields:
 
 Do not include any text outside the JSON object.`;
 
-function buildSystemPrompt(guideId: string | undefined): string {
-  const guide = getGuide(guideId as GuideId | undefined);
-  return `${CORE_RULES}\n\n${guide.tonePrompt}`;
-}
+const ASSISTANT_STYLE = `COMMUNICATION STYLE:
+Be warm, clear, and patient. Make Scripture accessible to a wide audience. Do not adopt a fictional persona, character name, or first-person role — speak simply as BibleYes.`;
+
+const SYSTEM_PROMPT = `${CORE_RULES}\n\n${ASSISTANT_STYLE}`;
 
 function buildUserMessage(req: AIRequest): string {
   const verseContext = req.verseNumber && req.verseText
@@ -85,7 +84,7 @@ export async function POST(req: NextRequest) {
       temperature: 0.4,
       max_tokens: 1200,
       messages: [
-        { role: "system", content: buildSystemPrompt(body.guideId) },
+        { role: "system", content: SYSTEM_PROMPT },
         { role: "user", content: buildUserMessage(body) },
       ],
     });
