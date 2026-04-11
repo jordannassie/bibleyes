@@ -88,9 +88,16 @@ export default function Testimonials() {
         <p className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-[#666666] mb-3">
           What people are saying
         </p>
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-12">
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-6">
           Loved by Bible readers everywhere.
         </h2>
+
+        <p className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-2">
+          5,023,238
+        </p>
+        <p className="text-sm text-gray-400 dark:text-[#666666] uppercase tracking-widest font-medium mb-12">
+          Conversations
+        </p>
 
         {/* Card */}
         <div
