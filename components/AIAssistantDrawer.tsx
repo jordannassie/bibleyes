@@ -85,6 +85,26 @@ export default function AIAssistantDrawer({
     return () => window.removeEventListener("bibleyes:toggle-ai", handler);
   }, []);
 
+  // Listen for verse commentary requests from VerseRow
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const { verseNumber, verseText, bookName: vBookName, chapter: vChapter } =
+        (e as CustomEvent).detail as {
+          verseNumber: number;
+          verseText: string;
+          bookName: string;
+          chapter: number;
+        };
+      setIsOpen(true);
+      const question = `Provide a Bible commentary for ${vBookName} ${vChapter}:${verseNumber} — "${verseText}". Explain its meaning, theological significance, and any relevant historical or cross-reference context.`;
+      // Slight delay so the drawer opens before the message fires
+      setTimeout(() => sendMessage(question), 100);
+    };
+    window.addEventListener("bibleyes:verse-commentary", handler);
+    return () => window.removeEventListener("bibleyes:verse-commentary", handler);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading]);
+
   useEffect(() => {
     if (isOpen) setTimeout(() => inputRef.current?.focus(), 300);
   }, [isOpen]);

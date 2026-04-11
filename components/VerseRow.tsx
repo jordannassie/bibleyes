@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import type { VerseData } from "@/lib/bible/types";
-import type { AIResponse } from "@/lib/ai/types";
 
 type Props = {
   verse: VerseData;
@@ -21,18 +20,12 @@ const HIGHLIGHT_COLORS = [
   { id: "pink",   bg: "bg-pink-400",    ring: "ring-pink-500",    hex: "#f472b6" },
 ];
 
-export default function VerseRow({ verse, translationCode, bookSlug, chapter, bookName, chapterText }: Props) {
+export default function VerseRow({ verse, bookSlug, chapter, bookName }: Props) {
   const [selected, setSelected] = useState(false);
   const [highlight, setHighlight] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
-
-  const [commentary, setCommentary] = useState<AIResponse | null>(null);
-  const [commentaryLoading, setCommentaryLoading] = useState(false);
-  const [commentaryError, setCommentaryError] = useState<string | null>(null);
-
   const ref = useRef<HTMLSpanElement>(null);
 
-  // Close popup when clicking outside
   useEffect(() => {
     if (!selected) return;
     function onOutside(e: MouseEvent) {
@@ -42,15 +35,6 @@ export default function VerseRow({ verse, translationCode, bookSlug, chapter, bo
     }
     document.addEventListener("mousedown", onOutside);
     return () => document.removeEventListener("mousedown", onOutside);
-  }, [selected]);
-
-  // Reset commentary when popup closes
-  useEffect(() => {
-    if (!selected) {
-      setCommentary(null);
-      setCommentaryError(null);
-      setCommentaryLoading(false);
-    }
   }, [selected]);
 
   const handleCopy = useCallback(() => {
@@ -74,34 +58,19 @@ export default function VerseRow({ verse, translationCode, bookSlug, chapter, bo
     }
   }, [verse, chapter, bookSlug, bookName]);
 
-  const handleCommentary = useCallback(async () => {
-    if (commentary || commentaryLoading) return;
-    setCommentaryLoading(true);
-    setCommentaryError(null);
-    try {
-      const res = await fetch("/api/ai/bible-assistant", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          book: bookSlug,
-          bookName: bookName ?? bookSlug,
-          chapter,
-          translation: translationCode,
-          chapterText: chapterText ?? verse.text,
+  const handleCommentary = useCallback(() => {
+    setSelected(false);
+    window.dispatchEvent(
+      new CustomEvent("bibleyes:verse-commentary", {
+        detail: {
           verseNumber: verse.number,
           verseText: verse.text,
-          question: `Provide a concise Bible commentary for ${bookName ?? bookSlug} ${chapter}:${verse.number}. Explain its meaning, theological significance, and any helpful historical or cross-reference context.`,
-          mode: "advanced",
-        }),
-      });
-      const data: AIResponse = await res.json();
-      setCommentary(data);
-    } catch {
-      setCommentaryError("Failed to load commentary. Please try again.");
-    } finally {
-      setCommentaryLoading(false);
-    }
-  }, [commentary, commentaryLoading, bookSlug, bookName, chapter, translationCode, chapterText, verse]);
+          bookName: bookName ?? bookSlug,
+          chapter,
+        },
+      })
+    );
+  }, [verse, chapter, bookSlug, bookName]);
 
   const highlightColor = HIGHLIGHT_COLORS.find((c) => c.id === highlight);
 
@@ -112,7 +81,7 @@ export default function VerseRow({ verse, translationCode, bookSlug, chapter, bo
         {verse.number}
       </sup>
 
-      {/* Verse text — tappable/clickable */}
+      {/* Verse text */}
       <span
         onClick={() => setSelected((s) => !s)}
         className={[
@@ -131,8 +100,8 @@ export default function VerseRow({ verse, translationCode, bookSlug, chapter, bo
       {/* Verse action popup */}
       {selected && (
         <span
-          className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 z-50 flex flex-col items-stretch bg-white dark:bg-[#1c1c1c] border border-gray-200 dark:border-[#333333] rounded-2xl shadow-xl overflow-hidden select-none"
-          style={{ width: "280px" }}
+          className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 z-50 flex flex-col items-stretch bg-white dark:bg-[#1c1c1c] border border-gray-200 dark:border-[#333333] rounded-2xl shadow-xl w-64 overflow-hidden select-none"
+          style={{ minWidth: "220px" }}
         >
           {/* Header */}
           <span className="flex items-center justify-between px-4 py-2.5 border-b border-gray-100 dark:border-[#333333]">
@@ -171,50 +140,16 @@ export default function VerseRow({ verse, translationCode, bookSlug, chapter, bo
             </span>
           </span>
 
-          {/* AI Commentary button */}
+          {/* AI Commentary */}
           <button
             onClick={handleCommentary}
-            disabled={commentaryLoading}
-            className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-colors border-b border-gray-100 dark:border-[#333333] w-full text-left disabled:opacity-60"
+            className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-colors border-b border-gray-100 dark:border-[#333333] w-full text-left"
           >
             <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
             </svg>
-            {commentaryLoading ? "Loading commentary…" : commentary ? "Commentary loaded" : "AI Commentary"}
-            {commentaryLoading && (
-              <svg className="w-3.5 h-3.5 ml-auto animate-spin text-blue-400" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 100 16v-4l-3 3 3 3v-4a8 8 0 01-8-8z" />
-              </svg>
-            )}
+            AI Commentary
           </button>
-
-          {/* Commentary panel */}
-          {commentaryError && (
-            <span className="px-4 py-3 text-xs text-red-500 border-b border-gray-100 dark:border-[#333333]">
-              {commentaryError}
-            </span>
-          )}
-
-          {commentary && (
-            <span className="flex flex-col border-b border-gray-100 dark:border-[#333333]">
-              <span className="px-4 pt-3 pb-2 text-xs text-gray-800 dark:text-gray-200 leading-relaxed max-h-48 overflow-y-auto block font-sans">
-                {commentary.answer}
-              </span>
-              {commentary.relatedReferences.length > 0 && (
-                <span className="px-4 pb-3 flex flex-wrap gap-1">
-                  {commentary.relatedReferences.map((ref) => (
-                    <span
-                      key={ref}
-                      className="text-[10px] font-medium bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 rounded-full px-2 py-0.5"
-                    >
-                      {ref}
-                    </span>
-                  ))}
-                </span>
-              )}
-            </span>
-          )}
 
           {/* Copy */}
           <button
