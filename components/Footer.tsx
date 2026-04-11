@@ -23,7 +23,7 @@ export default function Footer() {
       {/* Ministry banner */}
       <div className="border-b border-gray-100 dark:border-[#2a2a2a] py-5 px-4">
         <div className="max-w-7xl mx-auto flex items-center justify-center gap-3">
-          <span className="text-base font-bold text-gray-900 dark:text-white">
+          <span className="text-base font-bold text-gray-500 dark:text-gray-400">
               A Digital Ministry of
             </span>
           <a
