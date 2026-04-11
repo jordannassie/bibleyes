@@ -6,6 +6,11 @@ type Props = {
 };
 
 export default function ReaderContent({ data }: Props) {
+  const chapterText = data.sections
+    .flatMap((s) => s.verses)
+    .map((v) => `${v.number}. ${v.text}`)
+    .join("\n");
+
   return (
     <article className="max-w-2xl mx-auto px-4 sm:px-6 py-12">
       {/* Chapter title */}
@@ -30,6 +35,7 @@ export default function ReaderContent({ data }: Props) {
                 bookSlug={data.book.slug}
                 bookName={data.book.name}
                 chapter={data.chapter}
+                chapterText={chapterText}
               />
             ))}
           </p>
