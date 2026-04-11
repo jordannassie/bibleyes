@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import type { ChatMessage, AIResponse } from "@/lib/ai/types";
+import type { AIMode, ChatMessage, AIResponse } from "@/lib/ai/types";
 import { QUICK_ACTION_DEFS } from "@/lib/ai/types";
 
 // SVG icons for each quick action (no emojis)
@@ -61,6 +61,7 @@ export default function AIAssistantDrawer({
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [mode, setMode] = useState<AIMode>("simple");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -114,6 +115,7 @@ export default function AIAssistantDrawer({
           translation,
           chapterText,
           question,
+          mode,
         }),
       });
 
@@ -169,9 +171,33 @@ export default function AIAssistantDrawer({
             </div>
           </div>
 
+          {/* Simple / Advanced toggle */}
+          <div className="flex items-center bg-gray-100 rounded-full p-0.5 flex-shrink-0 ml-2">
+            <button
+              onClick={() => setMode("simple")}
+              className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
+                mode === "simple"
+                  ? "bg-white text-gray-900 shadow-sm"
+                  : "text-gray-400 hover:text-gray-600"
+              }`}
+            >
+              Simple
+            </button>
+            <button
+              onClick={() => setMode("advanced")}
+              className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
+                mode === "advanced"
+                  ? "bg-white text-gray-900 shadow-sm"
+                  : "text-gray-400 hover:text-gray-600"
+              }`}
+            >
+              Advanced
+            </button>
+          </div>
+
           <button
             onClick={() => setIsOpen(false)}
-            className="flex-shrink-0 p-2 rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors ml-2"
+            className="flex-shrink-0 p-2 rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors ml-1"
             aria-label="Close"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

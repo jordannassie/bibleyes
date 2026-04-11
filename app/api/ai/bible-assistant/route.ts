@@ -27,10 +27,20 @@ You must respond with a valid JSON object containing exactly these fields:
 
 Do not include any text outside the JSON object.`;
 
-const ASSISTANT_STYLE = `COMMUNICATION STYLE:
-Be warm, clear, and patient. Make Scripture accessible to a wide audience. Do not adopt a fictional persona, character name, or first-person role — speak simply as BibleYes.`;
+const SIMPLE_STYLE = `COMMUNICATION STYLE — SIMPLE MODE:
+Speak like a kind, knowledgeable friend. Use plain, everyday language — no theological jargon.
+Keep answers short: 2–4 sentences maximum per point. Be warm and encouraging.
+Focus on the one most important idea. Do not overwhelm — leave the reader wanting to explore more.
+Do not adopt a fictional persona, character name, or first-person role — speak simply as BibleYes.`;
 
-const SYSTEM_PROMPT = `${CORE_RULES}\n\n${ASSISTANT_STYLE}`;
+const ADVANCED_STYLE = `COMMUNICATION STYLE — ADVANCED MODE:
+Provide thorough theological explanation with historical context and cross-references.
+Use proper theological terms where helpful. Multiple paragraphs are appropriate.
+Cite specific verses and explore different interpretations where they exist.
+Do not adopt a fictional persona, character name, or first-person role — speak simply as BibleYes.`;
+
+const SIMPLE_PROMPT = `${CORE_RULES}\n\n${SIMPLE_STYLE}`;
+const ADVANCED_PROMPT = `${CORE_RULES}\n\n${ADVANCED_STYLE}`;
 
 function buildUserMessage(req: AIRequest): string {
   const verseContext = req.verseNumber && req.verseText
@@ -77,14 +87,15 @@ export async function POST(req: NextRequest) {
 
   try {
     const openai = new OpenAI({ apiKey });
+    const isSimple = body.mode !== "advanced";
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       response_format: { type: "json_object" },
       temperature: 0.4,
-      max_tokens: 1200,
+      max_tokens: isSimple ? 500 : 1200,
       messages: [
-        { role: "system", content: SYSTEM_PROMPT },
+        { role: "system", content: isSimple ? SIMPLE_PROMPT : ADVANCED_PROMPT },
         { role: "user", content: buildUserMessage(body) },
       ],
     });

@@ -1,3 +1,5 @@
+export type AIMode = "simple" | "advanced";
+
 export type AIRequest = {
   book: string;
   bookName: string;
@@ -7,6 +9,7 @@ export type AIRequest = {
   verseNumber?: number;
   verseText?: string;
   question: string;
+  mode?: AIMode;
 };
 
 export type AIResponse = {
