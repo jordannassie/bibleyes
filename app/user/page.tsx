@@ -118,11 +118,12 @@ export default function UserPage() {
         <span className="flex-1 text-center text-sm font-semibold text-gray-900 dark:text-white">
           My Journey
         </span>
-        {user.isDemo && (
-          <span className="text-[10px] font-bold uppercase tracking-wider text-orange-500 bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-900/40 rounded-full px-2 py-0.5">
-            Demo
-          </span>
-        )}
+        <button
+          onClick={handleLogout}
+          className="text-xs font-semibold text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors"
+        >
+          Log Out
+        </button>
       </div>
 
       <div className="max-w-lg mx-auto px-4 py-6 pb-24 space-y-6">
