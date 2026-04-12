@@ -119,8 +119,8 @@ export default function Header() {
               className="p-2 rounded-full text-gray-500 dark:text-[#888888] hover:bg-gray-100 dark:hover:bg-[#222222] transition-colors"
             >
               {user ? (
-                <span className="w-5 h-5 rounded-full bg-gray-900 dark:bg-white flex items-center justify-center">
-                  <span className="text-[9px] font-bold text-white dark:text-gray-900 leading-none">
+                <span className="w-7 h-7 rounded-full bg-gray-900 dark:bg-white flex items-center justify-center">
+                  <span className="text-[11px] font-bold text-white dark:text-gray-900 leading-none">
                     {user.name.charAt(0).toUpperCase()}
                   </span>
                 </span>
