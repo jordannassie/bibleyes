@@ -396,7 +396,7 @@ export default function AIAssistantDrawer({
                     ))}
                   </div>
                 ) : (
-                  <p className={`text-sm leading-relaxed ${activeStep === "pray" ? "font-serif italic" : ""}`}>
+                  <p className="text-sm leading-relaxed">
                     {currentContent ?? ""}
                   </p>
                 )}
@@ -410,6 +410,28 @@ export default function AIAssistantDrawer({
                 </span>
                 <span className="flex-1 h-px bg-gray-200 dark:bg-[#2a2a2a]" />
               </div>
+
+              {/* Follow-up quick pill chips */}
+              {selectedVerse && (
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { label: "Commentary",    q: `Give me a short theological commentary on ${selectedVerse.reference}.` },
+                    { label: "Explain",       q: `Explain ${selectedVerse.reference} in simple everyday language.` },
+                    { label: "Cross refs",    q: `What are the key cross-references for ${selectedVerse.reference}?` },
+                    { label: "Context",       q: `What is the historical and cultural context of ${selectedVerse.reference}?` },
+                    { label: "Apply today",   q: `How can I apply ${selectedVerse.reference} to my life today?` },
+                  ].map(({ label, q }) => (
+                    <button
+                      key={label}
+                      onClick={() => sendMessage(q)}
+                      disabled={loading}
+                      className="px-3 py-1.5 rounded-full bg-white dark:bg-[#1c1c1c] border border-gray-200 dark:border-[#333] text-xs font-medium text-gray-600 dark:text-[#aaa] hover:bg-gray-50 dark:hover:bg-[#222] hover:text-gray-900 dark:hover:text-white transition-colors shadow-sm disabled:opacity-40"
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              )}
 
               {/* Messages from follow-up questions */}
               {messages.map((msg, i) => {
