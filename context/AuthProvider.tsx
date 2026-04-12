@@ -26,6 +26,7 @@ type AuthContextType = {
   login: (email: string, password: string) => { success: boolean; error?: string };
   loginAsDemo: () => void;
   logout: () => void;
+  updateUser: (patch: Partial<Pick<MockUser, "name" | "email" | "avatar">>) => void;
 };
 
 const AuthContext = createContext<AuthContextType>({
@@ -33,6 +34,7 @@ const AuthContext = createContext<AuthContextType>({
   login:       () => ({ success: false }),
   loginAsDemo: () => {},
   logout:      () => {},
+  updateUser:  () => {},
 });
 
 export function useAuth() {
@@ -75,8 +77,13 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     setUser(null);
   }
 
+  function updateUser(patch: Partial<Pick<MockUser, "name" | "email" | "avatar">>) {
+    if (!user) return;
+    persist({ ...user, ...patch });
+  }
+
   return (
-    <AuthContext.Provider value={{ user, login, loginAsDemo, logout }}>
+    <AuthContext.Provider value={{ user, login, loginAsDemo, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

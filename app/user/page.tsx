@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthProvider";
@@ -36,10 +36,18 @@ function Card({ children, className = "" }: { children: React.ReactNode; classNa
 }
 
 export default function UserPage() {
-  const { user, logout } = useAuth();
+  const { user, logout, updateUser } = useAuth();
   const { toggle: toggleTheme, theme } = useTheme();
   const router = useRouter();
   const [liveJourneys, setLiveJourneys] = useState<JourneyEntry[]>([]);
+
+  // Edit profile modal state
+  const [editOpen, setEditOpen]     = useState(false);
+  const [editName, setEditName]     = useState("");
+  const [editEmail, setEditEmail]   = useState("");
+  const [editAvatar, setEditAvatar] = useState("");
+  const [saving, setSaving]         = useState(false);
+  const fileInputRef                = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setLiveJourneys(getJourneyEntries());
@@ -53,6 +61,33 @@ export default function UserPage() {
       return () => clearTimeout(t);
     }
   }, [user, router]);
+
+  function openEdit() {
+    if (!user) return;
+    setEditName(user.name);
+    setEditEmail(user.email);
+    setEditAvatar(user.avatar);
+    setEditOpen(true);
+  }
+
+  function handleAvatarFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      setEditAvatar(ev.target?.result as string);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function handleSave() {
+    setSaving(true);
+    setTimeout(() => {
+      updateUser({ name: editName.trim() || user!.name, email: editEmail.trim() || user!.email, avatar: editAvatar });
+      setSaving(false);
+      setEditOpen(false);
+    }, 400);
+  }
 
   function handleLogout() {
     logout();
@@ -95,9 +130,25 @@ export default function UserPage() {
         {/* ── 1. Profile card ── */}
         <Card className="px-5 py-5">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-gray-900 dark:bg-white flex items-center justify-center flex-shrink-0">
-              <span className="text-xl font-bold text-white dark:text-gray-900">{initials}</span>
-            </div>
+            {/* Avatar — tappable to edit */}
+            <button onClick={openEdit} className="relative flex-shrink-0 group">
+              <div className="w-14 h-14 rounded-2xl bg-gray-900 dark:bg-white flex items-center justify-center overflow-hidden">
+                {user.avatar ? (
+                  <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-xl font-bold text-white dark:text-gray-900">{initials}</span>
+                )}
+              </div>
+              {/* Camera overlay on hover */}
+              <div className="absolute inset-0 rounded-2xl bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
+                    d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </div>
+            </button>
+
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
                 <p className="text-base font-bold text-gray-900 dark:text-white truncate">{user.name}</p>
@@ -122,9 +173,21 @@ export default function UserPage() {
               </div>
             </div>
           </div>
-          <p className="text-xs text-gray-400 dark:text-[#555] mt-4 pt-4 border-t border-gray-100 dark:border-[#2a2a2a] text-center">
-            Your daily walk in God's Word
-          </p>
+          <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100 dark:border-[#2a2a2a]">
+            <p className="text-xs text-gray-400 dark:text-[#555]">
+              Your daily walk in God's Word
+            </p>
+            <button
+              onClick={openEdit}
+              className="flex items-center gap-1.5 text-xs font-semibold text-gray-500 dark:text-[#888] hover:text-gray-800 dark:hover:text-white transition-colors"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                  d="M15.232 5.232l3.536 3.536M9 13l6.586-6.586a2 2 0 112.828 2.828L11.828 15.828a4 4 0 01-2.828 1.172H7v-2a4 4 0 011.172-2.828z" />
+              </svg>
+              Edit
+            </button>
+          </div>
         </Card>
 
         {/* ── 2. BibleYes Plus upgrade card (Free plan only) ── */}
@@ -355,6 +418,136 @@ export default function UserPage() {
         </div>
 
       </div>
+
+      {/* ── Edit Profile modal ── */}
+      {editOpen && (
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            onClick={() => setEditOpen(false)}
+          />
+
+          {/* Sheet */}
+          <div className="relative w-full sm:max-w-md bg-white dark:bg-[#141414] rounded-t-3xl sm:rounded-3xl shadow-2xl px-5 pt-6 pb-10 sm:pb-6 animate-slide-up">
+            {/* Handle */}
+            <div className="w-10 h-1 rounded-full bg-gray-200 dark:bg-[#333] mx-auto mb-6 sm:hidden" />
+
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-base font-bold text-gray-900 dark:text-white">Edit Profile</h2>
+              <button
+                onClick={() => setEditOpen(false)}
+                className="p-1.5 rounded-full text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#222] transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Avatar picker */}
+            <div className="flex flex-col items-center mb-6">
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="relative group"
+              >
+                <div className="w-20 h-20 rounded-2xl bg-gray-900 dark:bg-white flex items-center justify-center overflow-hidden shadow-md">
+                  {editAvatar ? (
+                    <img src={editAvatar} alt="Preview" className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-2xl font-bold text-white dark:text-gray-900">
+                      {(editName || user.name).split(" ").map((n) => n[0]).join("").toUpperCase()}
+                    </span>
+                  )}
+                </div>
+                <div className="absolute inset-0 rounded-2xl bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
+                      d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+                {/* Small camera badge */}
+                <div className="absolute -bottom-1.5 -right-1.5 w-7 h-7 rounded-full bg-gray-900 dark:bg-white border-2 border-white dark:border-[#141414] flex items-center justify-center shadow">
+                  <svg className="w-3.5 h-3.5 text-white dark:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                      d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+              </button>
+              <p className="text-xs text-gray-400 dark:text-[#666] mt-3">Tap to change photo</p>
+              {editAvatar && (
+                <button
+                  onClick={() => setEditAvatar("")}
+                  className="text-xs text-red-400 hover:text-red-500 mt-1 transition-colors"
+                >
+                  Remove photo
+                </button>
+              )}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleAvatarFile}
+              />
+            </div>
+
+            {/* Fields */}
+            <div className="space-y-3 mb-6">
+              <div>
+                <label className="text-[11px] font-bold uppercase tracking-widest text-gray-400 dark:text-[#555] mb-1.5 block">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  placeholder="Your name"
+                  className="w-full bg-gray-50 dark:bg-[#1c1c1c] border border-gray-200 dark:border-[#333] rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white placeholder-gray-300 dark:placeholder-[#555] focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white/20 transition"
+                />
+              </div>
+              <div>
+                <label className="text-[11px] font-bold uppercase tracking-widest text-gray-400 dark:text-[#555] mb-1.5 block">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  value={editEmail}
+                  onChange={(e) => setEditEmail(e.target.value)}
+                  placeholder="your@email.com"
+                  className="w-full bg-gray-50 dark:bg-[#1c1c1c] border border-gray-200 dark:border-[#333] rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white placeholder-gray-300 dark:placeholder-[#555] focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white/20 transition"
+                />
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex gap-3">
+              <button
+                onClick={() => setEditOpen(false)}
+                className="flex-1 py-3 rounded-full border border-gray-200 dark:border-[#333] text-sm font-semibold text-gray-600 dark:text-[#aaa] hover:bg-gray-50 dark:hover:bg-[#1c1c1c] transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="flex-1 py-3 rounded-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm font-bold hover:bg-gray-700 dark:hover:bg-gray-100 transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+              >
+                {saving ? (
+                  <>
+                    <span className="w-4 h-4 rounded-full border-2 border-white/40 border-t-white animate-spin" />
+                    Saving…
+                  </>
+                ) : (
+                  "Save Changes"
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
