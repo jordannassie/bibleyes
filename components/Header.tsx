@@ -6,6 +6,7 @@ import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import SearchBar from "./SearchBar";
 import { useTheme } from "./ThemeProvider";
+import { useAuth } from "@/context/AuthProvider";
 
 const LOGO_URL =
   "https://dhuidtxkthlvkqyuxbkw.supabase.co/storage/v1/object/public/BibleYes/logos/ChatGPT%20Image%20Apr%2010,%202026,%2003_24_13%20PM.png";
@@ -13,6 +14,7 @@ const LOGO_URL =
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { theme, toggle } = useTheme();
+  const { user } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -111,14 +113,23 @@ export default function Header() {
               </svg>
             </button>
 
-            <button
-              aria-label="Profile"
+            <Link
+              href={user ? "/user" : "/login"}
+              aria-label={user ? "My Journey" : "Log In"}
               className="p-2 rounded-full text-gray-500 dark:text-[#888888] hover:bg-gray-100 dark:hover:bg-[#222222] transition-colors"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-              </svg>
-            </button>
+              {user ? (
+                <span className="w-5 h-5 rounded-full bg-gray-900 dark:bg-white flex items-center justify-center">
+                  <span className="text-[9px] font-bold text-white dark:text-gray-900 leading-none">
+                    {user.name.charAt(0).toUpperCase()}
+                  </span>
+                </span>
+              ) : (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                </svg>
+              )}
+            </Link>
           </div>
         </div>
 

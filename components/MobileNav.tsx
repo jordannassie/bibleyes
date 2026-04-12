@@ -2,10 +2,15 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthProvider";
 
 export default function MobileNav() {
   const pathname = usePathname();
   const router = useRouter();
+  const { user } = useAuth();
+
+  // Hide on login page
+  if (pathname === "/login") return null;
 
   function handleAIClick() {
     if (pathname.startsWith("/bible")) {
@@ -65,16 +70,20 @@ export default function MobileNav() {
       </button>
 
       {/* User */}
-      <button
-        className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold tracking-wide text-gray-400 dark:text-[#666666] hover:text-gray-600 dark:hover:text-[#e5e5e5] transition-colors"
-        aria-label="Profile"
+      <Link
+        href={user ? "/user" : "/login"}
+        className={[
+          "flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold tracking-wide transition-colors",
+          isActive("/user") ? "text-gray-900 dark:text-white" : "text-gray-400 dark:text-[#666666] hover:text-gray-600 dark:hover:text-[#e5e5e5]",
+        ].join(" ")}
+        aria-label="My Journey"
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6}
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={isActive("/user") ? 2.2 : 1.6}
             d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
         </svg>
-        User
-      </button>
+        {user ? "Me" : "Log In"}
+      </Link>
     </nav>
   );
 }
