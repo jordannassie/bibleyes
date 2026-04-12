@@ -91,7 +91,7 @@ export default function UserPage() {
 
   function handleLogout() {
     logout();
-    router.push("/login");
+    router.push("/");
   }
 
   if (!user) {
