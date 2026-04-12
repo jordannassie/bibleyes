@@ -183,13 +183,7 @@ export default function AIAssistantDrawer({
   }, [bookSlug, chapter]);
 
   // ── Fetch AI content for a devotional step ───────────────────────────────
-  async function fetchStepContent(step: DevotionalStep, verse: SelectedVerse) {
-    // Return cached content without re-fetching
-    setStepContent((prev) => {
-      if (prev[step] !== undefined) return prev;
-      return prev; // optimistic — actual fetch below
-    });
-
+  async function fetchStepContent(step: DevotionalStep, verse: SelectedVerse, mode: AIMode = aiMode) {
     setStepLoading(true);
     try {
       const question = VERSE_STEP_QUESTIONS[step](verse.reference, verse.verseText);
@@ -205,7 +199,7 @@ export default function AIAssistantDrawer({
           verseNumber: verse.verseNumber,
           verseText: verse.verseText,
           question,
-          mode: "simple",
+          mode,
         }),
       });
       const data: AIResponse = await res.json();
@@ -256,10 +250,18 @@ export default function AIAssistantDrawer({
     setActiveStep(step.key);
     if (selectedVerse) {
       saveJourneyEntry({ reference: selectedVerse.reference, step: step.journeyLabel });
-      // Fetch AI content if not already cached for this step
       if (stepContent[step.key] === undefined && !stepLoading) {
         fetchStepContent(step.key, selectedVerse);
       }
+    }
+  }
+
+  function handleModeChange(mode: AIMode) {
+    setAiMode(mode);
+    // Clear step cache so switching depth re-fetches with new style
+    setStepContent({});
+    if (selectedVerse) {
+      setTimeout(() => fetchStepContent(activeStep, selectedVerse, mode), 50);
     }
   }
 
@@ -308,24 +310,6 @@ export default function AIAssistantDrawer({
             </div>
           </div>
 
-          {/* Simple / Advanced toggle — chapter mode only */}
-          {!selectedVerse && (
-            <div className="flex items-center bg-gray-100 dark:bg-[#2a2a2a] rounded-full p-0.5 flex-shrink-0 ml-2">
-              {(["simple", "advanced"] as AIMode[]).map((m) => (
-                <button
-                  key={m}
-                  onClick={() => setAiMode(m)}
-                  className={`px-3 py-1 rounded-full text-xs font-semibold capitalize transition-colors ${
-                    aiMode === m
-                      ? "bg-white dark:bg-[#444] text-gray-900 dark:text-white shadow-sm"
-                      : "text-gray-400 hover:text-gray-600 dark:hover:text-[#aaa]"
-                  }`}
-                >
-                  {m}
-                </button>
-              ))}
-            </div>
-          )}
 
           <button
             onClick={() => setIsOpen(false)}
@@ -340,6 +324,33 @@ export default function AIAssistantDrawer({
 
         {/* ── Body ── */}
         <div className="flex-1 overflow-y-auto bg-gray-50 dark:bg-[#0f0f0f]">
+
+          {/* ── Beginner / Pro toggle ── */}
+          <div className="flex items-center gap-3 px-4 pt-4 pb-1">
+            <div className="flex items-center bg-white dark:bg-[#1c1c1c] border border-gray-200 dark:border-[#2a2a2a] rounded-full p-0.5 shadow-sm">
+              {([
+                { mode: "simple"   as AIMode, label: "Beginner" },
+                { mode: "advanced" as AIMode, label: "Pro"      },
+              ]).map(({ mode, label }) => (
+                <button
+                  key={mode}
+                  onClick={() => handleModeChange(mode)}
+                  className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
+                    aiMode === mode
+                      ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900 shadow-sm"
+                      : "text-gray-400 dark:text-[#666] hover:text-gray-600 dark:hover:text-[#aaa]"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <p className="text-[11px] text-gray-400 dark:text-[#555] leading-tight">
+              {aiMode === "simple"
+                ? "Clear, simple answers"
+                : "Deeper theology & context"}
+            </p>
+          </div>
 
           {/* ════════ VERSE JOURNEY MODE ════════ */}
           {selectedVerse ? (
