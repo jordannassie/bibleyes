@@ -153,6 +153,7 @@ export default function AIAssistantDrawer({
       setSelectedVerse(verse);
       setActiveStep("understand");
       setStepContent({});
+      setMessages([]);
       setIsOpen(true);
       saveJourneyEntry({ reference: ref, step: "Understand" });
       // Auto-fetch Understand
