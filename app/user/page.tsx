@@ -9,7 +9,6 @@ import {
   CONTINUE_READING,
   SAVED_VERSES,
   SAVED_PRAYERS,
-  NOTES,
   type JourneyStep,
 } from "@/lib/mock/journey-data";
 import { getJourneyEntries, formatRelativeDate, type JourneyEntry } from "@/lib/journey-store";
@@ -42,18 +41,14 @@ export default function UserPage() {
   const router = useRouter();
   const [liveJourneys, setLiveJourneys] = useState<JourneyEntry[]>([]);
 
-  // Load live journey entries from localStorage
   useEffect(() => {
     setLiveJourneys(getJourneyEntries());
   }, []);
 
   useEffect(() => {
     if (user === null) {
-      // Give localStorage a tick to rehydrate before redirecting
       const t = setTimeout(() => {
-        if (!localStorage.getItem("bibleyes-user")) {
-          router.replace("/login");
-        }
+        if (!localStorage.getItem("bibleyes-user")) router.replace("/login");
       }, 80);
       return () => clearTimeout(t);
     }
@@ -72,7 +67,8 @@ export default function UserPage() {
     );
   }
 
-  const initials = user.name.split(" ").map((n) => n[0]).join("").toUpperCase();
+  const initials  = user.name.split(" ").map((n) => n[0]).join("").toUpperCase();
+  const isFree    = user.plan === "Free";
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#0a0a0a] transition-colors duration-200">
@@ -96,19 +92,28 @@ export default function UserPage() {
 
       <div className="max-w-lg mx-auto px-4 py-6 pb-24 space-y-6">
 
-        {/* ── Profile card ── */}
+        {/* ── 1. Profile card ── */}
         <Card className="px-5 py-5">
           <div className="flex items-center gap-4">
-            {/* Avatar */}
             <div className="w-14 h-14 rounded-2xl bg-gray-900 dark:bg-white flex items-center justify-center flex-shrink-0">
               <span className="text-xl font-bold text-white dark:text-gray-900">{initials}</span>
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
                 <p className="text-base font-bold text-gray-900 dark:text-white truncate">{user.name}</p>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-[#666] bg-gray-100 dark:bg-[#2a2a2a] rounded-full px-2 py-0.5">
+                {/* Plan badge */}
+                <span className={`text-[10px] font-bold uppercase tracking-wider rounded-full px-2 py-0.5 ${
+                  isFree
+                    ? "text-gray-500 dark:text-[#888] bg-gray-100 dark:bg-[#2a2a2a]"
+                    : "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/40"
+                }`}>
                   {user.plan}
                 </span>
+                {isFree && (
+                  <Link href="/plans" className="text-[11px] font-semibold text-blue-500 hover:text-blue-600 transition-colors">
+                    Upgrade
+                  </Link>
+                )}
               </div>
               <p className="text-xs text-gray-400 dark:text-[#666] mt-0.5 truncate">{user.email}</p>
               <div className="flex items-center gap-1.5 mt-2">
@@ -122,7 +127,50 @@ export default function UserPage() {
           </p>
         </Card>
 
-        {/* ── Continue Reading ── */}
+        {/* ── 2. BibleYes Plus upgrade card (Free plan only) ── */}
+        {isFree && (
+          <div className="rounded-2xl border border-gray-200 dark:border-[#2a2a2a] bg-white dark:bg-[#141414] shadow-sm px-5 py-5">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-[#555] mb-1">
+                  BibleYes Plus
+                </p>
+                <p className="text-sm font-semibold text-gray-900 dark:text-white mb-1">
+                  Deepen your daily devotional
+                </p>
+                <p className="text-xs text-gray-500 dark:text-[#888] leading-relaxed mb-4">
+                  Unlock more daily AI verse journeys and richer Bible guidance.
+                </p>
+                <ul className="space-y-1 mb-5">
+                  {[
+                    "More daily AI verse journeys",
+                    "Richer devotional experience",
+                    "Full BibleYes access",
+                  ].map((item) => (
+                    <li key={item} className="flex items-center gap-2 text-xs text-gray-500 dark:text-[#888]">
+                      <svg className="w-3.5 h-3.5 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                      </svg>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href="/plans"
+                  className="inline-flex items-center gap-1.5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-full px-5 py-2.5 text-sm font-semibold hover:bg-gray-700 dark:hover:bg-gray-100 transition-colors"
+                >
+                  Upgrade to Plus
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+                <p className="text-[11px] text-gray-300 dark:text-[#555] mt-2.5">Starting at $8/month</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── 3. Continue Reading ── */}
         <div>
           <SectionLabel>Continue Reading</SectionLabel>
           <Card className="px-5 py-4">
@@ -156,7 +204,7 @@ export default function UserPage() {
           </Card>
         </div>
 
-        {/* ── Saved Verses ── */}
+        {/* ── 4. Saved Verses ── */}
         <div>
           <SectionLabel>Saved Verses</SectionLabel>
           <div className="flex flex-wrap gap-2">
@@ -174,7 +222,7 @@ export default function UserPage() {
           </div>
         </div>
 
-        {/* ── Recent Verse Journeys ── */}
+        {/* ── 5. Recent Verse Journeys ── */}
         <div>
           <SectionLabel>Recent Verse Journeys</SectionLabel>
           {liveJourneys.length > 0 ? (
@@ -213,7 +261,7 @@ export default function UserPage() {
           )}
         </div>
 
-        {/* ── Saved Prayers ── */}
+        {/* ── 6. Saved Prayers ── */}
         <div>
           <SectionLabel>Saved Prayers</SectionLabel>
           <div className="space-y-3">
@@ -228,7 +276,7 @@ export default function UserPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-[11px] font-bold text-purple-500 dark:text-purple-400 mb-1">{p.reference}</p>
-                    <p className="text-sm text-gray-700 dark:text-[#ccc] leading-relaxed italic">&ldquo;{p.text}&rdquo;</p>
+                    <p className="text-sm text-gray-700 dark:text-[#ccc] leading-relaxed">&ldquo;{p.text}&rdquo;</p>
                     <p className="text-[11px] text-gray-300 dark:text-[#555] mt-2">{p.date}</p>
                   </div>
                 </div>
@@ -237,31 +285,7 @@ export default function UserPage() {
           </div>
         </div>
 
-        {/* ── Notes ── */}
-        <div>
-          <SectionLabel>Notes</SectionLabel>
-          <div className="space-y-3">
-            {NOTES.map((n) => (
-              <Card key={n.reference} className="px-5 py-4">
-                <div className="flex items-start gap-3">
-                  <div className="w-7 h-7 rounded-lg bg-yellow-50 dark:bg-yellow-950/20 border border-yellow-100 dark:border-yellow-900/30 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <svg className="w-3.5 h-3.5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                        d="M15.232 5.232l3.536 3.536M9 13l6.586-6.586a2 2 0 112.828 2.828L11.828 15.828a4 4 0 01-2.828 1.172H7v-2a4 4 0 011.172-2.828z" />
-                    </svg>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-[11px] font-bold text-yellow-600 dark:text-yellow-500 mb-1">{n.reference}</p>
-                    <p className="text-sm text-gray-700 dark:text-[#ccc] leading-relaxed">{n.text}</p>
-                    <p className="text-[11px] text-gray-300 dark:text-[#555] mt-2">{n.date}</p>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-
-        {/* ── Settings ── */}
+        {/* ── 7. Settings ── */}
         <div>
           <SectionLabel>Settings</SectionLabel>
           <Card>
@@ -296,19 +320,25 @@ export default function UserPage() {
               </span>
             </button>
 
-            {/* Manage Plan */}
-            <div className="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 dark:border-[#2a2a2a]">
+            {/* Plan & Billing */}
+            <Link
+              href="/plans"
+              className="w-full flex items-center justify-between px-5 py-3.5 border-b border-gray-100 dark:border-[#2a2a2a] hover:bg-gray-50 dark:hover:bg-[#1c1c1c] transition-colors"
+            >
               <div className="flex items-center gap-3">
                 <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
                     d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                 </svg>
-                <span className="text-sm text-gray-700 dark:text-[#ccc]">Manage Plan</span>
+                <span className="text-sm text-gray-700 dark:text-[#ccc]">Plan & Billing</span>
               </div>
-              <svg className="w-4 h-4 text-gray-300 dark:text-[#555]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold text-gray-400 dark:text-[#666]">{user.plan}</span>
+                <svg className="w-4 h-4 text-gray-300 dark:text-[#555]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </Link>
 
             {/* Log Out */}
             <button

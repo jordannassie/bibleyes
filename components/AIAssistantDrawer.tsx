@@ -2,9 +2,11 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import Link from "next/link";
 import type { AIMode, ChatMessage, AIResponse } from "@/lib/ai/types";
 import type { DevotionalStep } from "@/lib/mock/devotional-content";
 import { saveJourneyEntry } from "@/lib/journey-store";
+import { useAuth } from "@/context/AuthProvider";
 
 // ── Devotional step config ────────────────────────────────────────────────────
 type StepDef = {
@@ -99,6 +101,8 @@ export default function AIAssistantDrawer({
   const searchParams = useSearchParams();
   const router       = useRouter();
   const pathname     = usePathname();
+  const { user }     = useAuth();
+  const isFree       = !user || user.plan === "Free";
 
   const [isOpen, setIsOpen]               = useState(false);
   const [messages, setMessages]           = useState<ChatMessage[]>([]);
@@ -382,6 +386,16 @@ export default function AIAssistantDrawer({
                   );
                 })}
               </div>
+
+              {/* Free plan usage hint */}
+              {isFree && (
+                <p className="text-[11px] text-center text-gray-300 dark:text-[#555]">
+                  Free plan · limited daily AI journeys.{" "}
+                  <Link href="/plans" className="text-blue-500 hover:text-blue-600 font-semibold transition-colors">
+                    Upgrade
+                  </Link>
+                </p>
+              )}
 
               {/* Content card */}
               <div className={`rounded-2xl border px-4 py-4 shadow-sm min-h-[80px] ${activeStepDef.active}`}>
