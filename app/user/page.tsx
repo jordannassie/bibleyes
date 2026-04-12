@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthProvider";
@@ -8,11 +8,11 @@ import { useTheme } from "@/components/ThemeProvider";
 import {
   CONTINUE_READING,
   SAVED_VERSES,
-  RECENT_JOURNEYS,
   SAVED_PRAYERS,
   NOTES,
   type JourneyStep,
 } from "@/lib/mock/journey-data";
+import { getJourneyEntries, formatRelativeDate, type JourneyEntry } from "@/lib/journey-store";
 
 const STEP_COLORS: Record<JourneyStep, string> = {
   "Understand": "bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 border-blue-100 dark:border-blue-900/40",
@@ -40,6 +40,12 @@ export default function UserPage() {
   const { user, logout } = useAuth();
   const { toggle: toggleTheme, theme } = useTheme();
   const router = useRouter();
+  const [liveJourneys, setLiveJourneys] = useState<JourneyEntry[]>([]);
+
+  // Load live journey entries from localStorage
+  useEffect(() => {
+    setLiveJourneys(getJourneyEntries());
+  }, []);
 
   useEffect(() => {
     if (user === null) {
@@ -171,24 +177,40 @@ export default function UserPage() {
         {/* ── Recent Verse Journeys ── */}
         <div>
           <SectionLabel>Recent Verse Journeys</SectionLabel>
-          <Card>
-            {RECENT_JOURNEYS.map((j, i) => (
-              <div
-                key={j.reference}
-                className={`flex items-center justify-between px-5 py-3.5 ${
-                  i < RECENT_JOURNEYS.length - 1 ? "border-b border-gray-100 dark:border-[#2a2a2a]" : ""
-                }`}
-              >
-                <div>
-                  <p className="text-sm font-semibold text-gray-900 dark:text-white">{j.reference}</p>
-                  <p className="text-xs text-gray-400 dark:text-[#555] mt-0.5">{j.date}</p>
+          {liveJourneys.length > 0 ? (
+            <Card>
+              {liveJourneys.map((j, i) => (
+                <div
+                  key={`${j.reference}-${j.step}`}
+                  className={`flex items-center justify-between px-5 py-3.5 ${
+                    i < liveJourneys.length - 1 ? "border-b border-gray-100 dark:border-[#2a2a2a]" : ""
+                  }`}
+                >
+                  <div>
+                    <p className="text-sm font-semibold text-gray-900 dark:text-white">{j.reference}</p>
+                    <p className="text-xs text-gray-400 dark:text-[#555] mt-0.5">{formatRelativeDate(j.timestamp)}</p>
+                  </div>
+                  <span className={`text-[11px] font-semibold border rounded-full px-2.5 py-1 ${STEP_COLORS[j.step as JourneyStep]}`}>
+                    {j.step}
+                  </span>
                 </div>
-                <span className={`text-[11px] font-semibold border rounded-full px-2.5 py-1 ${STEP_COLORS[j.step]}`}>
-                  {j.step}
-                </span>
-              </div>
-            ))}
-          </Card>
+              ))}
+            </Card>
+          ) : (
+            <Card className="px-5 py-6 text-center">
+              <p className="text-sm text-gray-400 dark:text-[#666]">No journeys yet.</p>
+              <p className="text-xs text-gray-300 dark:text-[#555] mt-1">Tap a verse while reading to begin.</p>
+              <Link
+                href="/bible/web/john/1"
+                className="inline-flex items-center gap-1.5 mt-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-full px-4 py-2 text-xs font-semibold hover:bg-gray-700 dark:hover:bg-gray-100 transition-colors"
+              >
+                Start reading
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+            </Card>
+          )}
         </div>
 
         {/* ── Saved Prayers ── */}
