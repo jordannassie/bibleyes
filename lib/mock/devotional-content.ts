@@ -18,7 +18,7 @@ const CONTENT: Record<string, VerseDevotional> = {
     liveIt:
       "Pause today and look at something in creation — the sky, a tree, a person you love. Remember that Christ made it. Let that reality shift how you see ordinary moments.",
     pray:
-      "Lord Jesus, You are the Creator of all things. Help me see Your fingerprints in the world around me today. Let creation draw me closer to You. Amen.",
+      "God, You are the Creator of all things. Help me see Your fingerprints in the world around me today. Let creation draw me closer to You. Amen.",
   },
   "John 1:5": {
     reference: "John 1:5",
@@ -54,7 +54,7 @@ const CONTENT: Record<string, VerseDevotional> = {
     liveIt:
       "Is there anything you've been hiding or avoiding in your walk with God? Take one step toward honesty with Him today — confess it, release it, or bring it into the open.",
     pray:
-      "Lord, You are light and in You there is no darkness. Help me walk in that light — honestly, humbly, and openly before You. Thank You for Your grace. Amen.",
+      "God, You are light and in You there is no darkness. Help me walk in that light — honestly, humbly, and openly before You. Thank You for Your grace. Amen.",
   },
   "Romans 8:28": {
     reference: "Romans 8:28",
@@ -72,7 +72,7 @@ const CONTENT: Record<string, VerseDevotional> = {
     liveIt:
       "Today, make a list of three things you are anxious about. For each one, say out loud: 'My Shepherd has this.' Let that truth replace fear with peace.",
     pray:
-      "Lord, You are my shepherd and I shall lack nothing. Guide me today, provide for my needs, and help me rest in Your care. I trust You with everything I am carrying. Amen.",
+      "God, You are my shepherd and I shall lack nothing. Guide me today, provide for my needs, and help me rest in Your care. I trust You with everything I am carrying. Amen.",
   },
 };
 
@@ -81,7 +81,7 @@ export const FALLBACK_DEVOTIONAL: Omit<VerseDevotional, "reference"> = {
     "This verse reveals something true and important about God's nature, His love, and His will for your life. Read it slowly. Let it speak to you today.",
   liveIt:
     "Take one step today that reflects the truth of this verse. Ask God to show you what that looks like in a practical, everyday moment.",
-  pray: "Lord, speak to me through this verse. Let it shape how I think, how I love, and how I live today. Amen.",
+  pray: "God, speak to me through this verse. Let it shape how I think, how I love, and how I live today. Amen.",
 };
 
 export function getDevotional(reference: string): VerseDevotional {

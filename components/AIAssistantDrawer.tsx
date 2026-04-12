@@ -61,14 +61,14 @@ const VERSE_STEP_QUESTIONS: Record<DevotionalStep, (ref: string, text: string) =
   liveIt: (ref, text) =>
     `Based on ${ref} — "${text}" — give me one short, practical action I can take today to live out this truth.`,
   pray: (ref, text) =>
-    `Write a short, heartfelt personal prayer (3–5 sentences) based on ${ref} — "${text}". Keep it simple and sincere.`,
+    `Write a short, heartfelt personal prayer (3–5 sentences) based on ${ref} — "${text}". Keep it simple and sincere. Address God as "God" only — never use "Lord".`,
 };
 
 // AI prompts per step — chapter level
 const CHAPTER_STEP_QUESTIONS: Record<DevotionalStep, (b: string, c: number) => string> = {
   understand: (b, c) => `What does ${b} chapter ${c} mean? Explain it simply from a Christian perspective.`,
   liveIt:     (b, c) => `What is one practical way I can live out the truth of ${b} chapter ${c} today?`,
-  pray:       (b, c) => `Write a short prayer based on the themes and truth of ${b} chapter ${c}.`,
+  pray:       (b, c) => `Write a short prayer based on the themes and truth of ${b} chapter ${c}. Address God as "God" only — never use "Lord".`,
 };
 
 // ── Types ─────────────────────────────────────────────────────────────────────
