@@ -143,14 +143,12 @@ export default function VerseRow({ verse, bookSlug, chapter, bookName }: Props) 
           {/* AI Commentary */}
           <button
             onClick={handleCommentary}
-            className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-white bg-gray-900 dark:bg-white dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-100 transition-colors border-b border-gray-100 dark:border-[#333333] w-full text-left"
+            className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 dark:text-[#cccccc] hover:bg-gray-50 dark:hover:bg-[#222222] transition-colors border-b border-gray-100 dark:border-[#333333] w-full text-left"
           >
-            <span className="w-5 h-5 rounded-full bg-white dark:bg-gray-900 flex items-center justify-center flex-shrink-0">
-              <svg className="w-3 h-3 text-gray-900 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                  d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-              </svg>
-            </span>
+            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+            </svg>
             AI
           </button>
 

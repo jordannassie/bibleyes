@@ -357,7 +357,7 @@ export default function AIAssistantDrawer({
                 <p className="text-[11px] font-bold text-blue-500 dark:text-blue-400 mb-2 uppercase tracking-wide">
                   {selectedVerse.reference}
                 </p>
-                <p className="text-sm font-serif text-gray-800 dark:text-[#ddd] leading-relaxed italic">
+                <p className="text-sm text-gray-800 dark:text-[#ddd] leading-relaxed">
                   &ldquo;{selectedVerse.verseText}&rdquo;
                 </p>
               </div>
