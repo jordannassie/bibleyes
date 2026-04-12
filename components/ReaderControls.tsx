@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { BOOKS, OLD_TESTAMENT, NEW_TESTAMENT } from "@/data/books";
 import type { TranslationMeta } from "@/lib/bible/types";
@@ -18,17 +18,14 @@ const FONT_SIZES = [
   { label: "L",  size: "1.35rem"  },
   { label: "XL", size: "1.6rem"   },
 ];
-const DEFAULT_IDX  = 1; // "M"
-const STORAGE_KEY  = "bibleyes-font-size";
-const CSS_VAR      = "--bible-font-size";
+const DEFAULT_IDX = 1;
+const STORAGE_KEY = "bibleyes-font-size";
+const CSS_VAR     = "--bible-font-size";
 
 export default function ReaderControls({ translation, bookSlug, chapter, translations }: Props) {
   const router = useRouter();
-  const [fontIdx, setFontIdx]       = useState(DEFAULT_IDX);
-  const [dropdownOpen, setDropdown] = useState(false);
-  const dropdownRef                 = useRef<HTMLDivElement>(null);
+  const [fontIdx, setFontIdx] = useState(DEFAULT_IDX);
 
-  // Rehydrate from localStorage and apply CSS var on mount
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
@@ -42,26 +39,15 @@ export default function ReaderControls({ translation, bookSlug, chapter, transla
     }
   }, []);
 
-  // Close dropdown on outside click
-  useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setDropdown(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, []);
-
-  function selectFont(idx: number) {
-    const { size } = FONT_SIZES[idx];
-    setFontIdx(idx);
+  function cycleFont() {
+    const next = (fontIdx + 1) % FONT_SIZES.length;
+    const { size } = FONT_SIZES[next];
+    setFontIdx(next);
     document.documentElement.style.setProperty(CSS_VAR, size);
     localStorage.setItem(STORAGE_KEY, size);
-    setDropdown(false);
   }
 
-  const currentBook = BOOKS.find((b) => b.slug === bookSlug);
+  const currentBook  = BOOKS.find((b) => b.slug === bookSlug);
   const chapterCount = currentBook?.chapterCount ?? 1;
 
   const navigate = (newBook: string, newChapter: number, newTranslation?: string) => {
@@ -136,49 +122,18 @@ export default function ReaderControls({ translation, bookSlug, chapter, transla
             </svg>
           </button>
 
-          {/* Font size dropdown */}
-          <div ref={dropdownRef} className="relative flex-shrink-0">
-            <button
-              aria-label="Font size"
-              onClick={() => setDropdown((v) => !v)}
-              className={`flex items-center gap-0.5 px-3 py-1.5 rounded-full border transition-colors select-none ${
-                dropdownOpen
-                  ? "border-gray-400 dark:border-[#555] text-gray-900 dark:text-white bg-gray-50 dark:bg-[#222]"
-                  : "border-gray-200 dark:border-[#333333] text-gray-500 dark:text-[#888888] hover:border-gray-300 hover:text-gray-700 dark:hover:text-white"
-              }`}
-            >
-              <span className="text-sm font-bold leading-none">A</span>
-              <span className="text-[10px] font-bold leading-none">A</span>
-              <span className="text-[10px] font-semibold text-gray-400 dark:text-[#666] ml-1 leading-none">
-                {FONT_SIZES[fontIdx].label}
-              </span>
-            </button>
-
-            {dropdownOpen && (
-              <div className="absolute right-0 top-full mt-2 w-44 bg-white dark:bg-[#1c1c1c] border border-gray-200 dark:border-[#333] rounded-2xl shadow-lg overflow-hidden z-50">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-[#555] px-4 pt-3 pb-2">
-                  Text Size
-                </p>
-                {FONT_SIZES.map((fs, i) => (
-                  <button
-                    key={fs.label}
-                    onClick={() => selectFont(i)}
-                    className={`w-full flex items-center justify-between px-4 py-3 text-sm transition-colors ${
-                      fontIdx === i
-                        ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-semibold"
-                        : "text-gray-700 dark:text-[#ccc] hover:bg-gray-50 dark:hover:bg-[#2a2a2a]"
-                    }`}
-                  >
-                    <span style={{ fontSize: fs.size }} className="font-serif leading-none">
-                      The Word
-                    </span>
-                    <span className="text-[11px] font-bold ml-3 opacity-60">{fs.label}</span>
-                  </button>
-                ))}
-                <div className="h-2" />
-              </div>
-            )}
-          </div>
+          {/* Font size — tap to cycle S → M → L → XL */}
+          <button
+            aria-label="Font size"
+            onClick={cycleFont}
+            className="flex-shrink-0 flex items-center gap-0.5 px-3 py-1.5 rounded-full border border-gray-200 dark:border-[#333333] text-gray-500 dark:text-[#888888] hover:border-gray-300 hover:text-gray-700 dark:hover:text-white transition-colors select-none"
+          >
+            <span className="text-sm font-bold leading-none">A</span>
+            <span className="text-[10px] font-bold leading-none">A</span>
+            <span className="text-[10px] font-semibold text-gray-400 dark:text-[#666] ml-1 leading-none">
+              {FONT_SIZES[fontIdx].label}
+            </span>
+          </button>
 
         </div>
       </div>
