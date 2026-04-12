@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import type { AIMode, ChatMessage, AIResponse } from "@/lib/ai/types";
-import { getDevotional, type DevotionalStep } from "@/lib/mock/devotional-content";
+import type { DevotionalStep } from "@/lib/mock/devotional-content";
 import { saveJourneyEntry } from "@/lib/journey-store";
 
 // ── Devotional step config ────────────────────────────────────────────────────
@@ -54,7 +54,17 @@ const STEPS: StepDef[] = [
   },
 ];
 
-// Chapter-level AI prompts for each devotional step
+// AI prompts per step — verse level
+const VERSE_STEP_QUESTIONS: Record<DevotionalStep, (ref: string, text: string) => string> = {
+  understand: (ref, text) =>
+    `Explain ${ref} — "${text}" — in simple, clear language from a Christian perspective. What does this verse mean and teach us?`,
+  liveIt: (ref, text) =>
+    `Based on ${ref} — "${text}" — give me one short, practical action I can take today to live out this truth.`,
+  pray: (ref, text) =>
+    `Write a short, heartfelt personal prayer (3–5 sentences) based on ${ref} — "${text}". Keep it simple and sincere.`,
+};
+
+// AI prompts per step — chapter level
 const CHAPTER_STEP_QUESTIONS: Record<DevotionalStep, (b: string, c: number) => string> = {
   understand: (b, c) => `What does ${b} chapter ${c} mean? Explain it simply from a Christian perspective.`,
   liveIt:     (b, c) => `What is one practical way I can live out the truth of ${b} chapter ${c} today?`,
@@ -97,8 +107,10 @@ export default function AIAssistantDrawer({
   const [aiMode, setAiMode]               = useState<AIMode>("simple");
 
   // Verse Journey state
-  const [selectedVerse, setSelectedVerse] = useState<SelectedVerse | null>(null);
-  const [activeStep, setActiveStep]       = useState<DevotionalStep>("understand");
+  const [selectedVerse, setSelectedVerse]   = useState<SelectedVerse | null>(null);
+  const [activeStep, setActiveStep]         = useState<DevotionalStep>("understand");
+  const [stepContent, setStepContent]       = useState<Partial<Record<DevotionalStep, string>>>({});
+  const [stepLoading, setStepLoading]       = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef       = useRef<HTMLTextAreaElement>(null);
@@ -131,20 +143,24 @@ export default function AIAssistantDrawer({
         chapter: number;
       };
       const ref = `${detail.bookName} ${detail.chapter}:${detail.verseNumber}`;
-      setSelectedVerse({
+      const verse: SelectedVerse = {
         reference:   ref,
         verseText:   detail.verseText,
         verseNumber: detail.verseNumber,
         bookName:    detail.bookName,
         chapter:     detail.chapter,
-      });
+      };
+      setSelectedVerse(verse);
       setActiveStep("understand");
+      setStepContent({});
       setIsOpen(true);
-      // Save initial "Understand" step to journey
       saveJourneyEntry({ reference: ref, step: "Understand" });
+      // Auto-fetch Understand
+      setTimeout(() => fetchStepContent("understand", verse), 80);
     };
     window.addEventListener("bibleyes:verse-commentary", handler);
     return () => window.removeEventListener("bibleyes:verse-commentary", handler);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -158,7 +174,46 @@ export default function AIAssistantDrawer({
   useEffect(() => {
     setMessages([]);
     setSelectedVerse(null);
+    setStepContent({});
   }, [bookSlug, chapter]);
+
+  // ── Fetch AI content for a devotional step ───────────────────────────────
+  async function fetchStepContent(step: DevotionalStep, verse: SelectedVerse) {
+    // Return cached content without re-fetching
+    setStepContent((prev) => {
+      if (prev[step] !== undefined) return prev;
+      return prev; // optimistic — actual fetch below
+    });
+
+    setStepLoading(true);
+    try {
+      const question = VERSE_STEP_QUESTIONS[step](verse.reference, verse.verseText);
+      const res = await fetch("/api/ai/bible-assistant", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          book: bookSlug,
+          bookName: verse.bookName,
+          chapter: verse.chapter,
+          translation,
+          chapterText,
+          verseNumber: verse.verseNumber,
+          verseText: verse.verseText,
+          question,
+          mode: "simple",
+        }),
+      });
+      const data: AIResponse = await res.json();
+      setStepContent((prev) => ({ ...prev, [step]: data.answer }));
+    } catch {
+      setStepContent((prev) => ({
+        ...prev,
+        [step]: "Something went wrong. Please try again.",
+      }));
+    } finally {
+      setStepLoading(false);
+    }
+  }
 
   // ── AI send (chapter-level follow-up questions) ──────────────────────────
   async function sendMessage(question: string) {
@@ -196,6 +251,10 @@ export default function AIAssistantDrawer({
     setActiveStep(step.key);
     if (selectedVerse) {
       saveJourneyEntry({ reference: selectedVerse.reference, step: step.journeyLabel });
+      // Fetch AI content if not already cached for this step
+      if (stepContent[step.key] === undefined && !stepLoading) {
+        fetchStepContent(step.key, selectedVerse);
+      }
     }
   }
 
@@ -206,10 +265,8 @@ export default function AIAssistantDrawer({
     }
   }
 
-  // ── Devotional content for current verse + step ──────────────────────────
-  const devotional     = selectedVerse ? getDevotional(selectedVerse.reference) : null;
-  const stepContent    = devotional ? devotional[activeStep] : null;
   const activeStepDef  = STEPS.find((s) => s.key === activeStep)!;
+  const currentContent = stepContent[activeStep];
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (
@@ -326,18 +383,23 @@ export default function AIAssistantDrawer({
               </div>
 
               {/* Content card */}
-              {stepContent && (
-                <div className={`rounded-2xl border px-4 py-4 shadow-sm ${activeStepDef.active}`}>
-                  <p className="text-[10px] font-bold uppercase tracking-widest mb-2 opacity-70">
-                    {activeStepDef.label}
+              <div className={`rounded-2xl border px-4 py-4 shadow-sm min-h-[80px] ${activeStepDef.active}`}>
+                <p className="text-[10px] font-bold uppercase tracking-widest mb-2 opacity-70">
+                  {activeStepDef.label}
+                </p>
+                {stepLoading && currentContent === undefined ? (
+                  <div className="flex items-center gap-1.5 py-1">
+                    {[0, 1, 2].map((i) => (
+                      <div key={i} className="w-1.5 h-1.5 rounded-full bg-current opacity-40 animate-bounce"
+                        style={{ animationDelay: `${i * 0.15}s` }} />
+                    ))}
+                  </div>
+                ) : (
+                  <p className={`text-sm leading-relaxed ${activeStep === "pray" ? "font-serif italic" : ""}`}>
+                    {currentContent ?? ""}
                   </p>
-                  <p className={`text-sm leading-relaxed ${
-                    activeStep === "pray" ? "font-serif italic" : ""
-                  }`}>
-                    {stepContent}
-                  </p>
-                </div>
-              )}
+                )}
+              </div>
 
               {/* Divider */}
               <div className="flex items-center gap-3 pt-1">
