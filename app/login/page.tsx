@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthProvider";
 
@@ -46,16 +47,18 @@ export default function LoginPage() {
 
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">
-          <Image
-            src={LOGO_URL}
-            alt="BibleYes"
-            width={64}
-            height={64}
-            className="rounded-2xl shadow-md mb-4"
-          />
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">
-            Welcome to BibleYes
-          </h1>
+          <Link href="/" className="flex flex-col items-center group">
+            <Image
+              src={LOGO_URL}
+              alt="BibleYes"
+              width={64}
+              height={64}
+              className="rounded-2xl shadow-md mb-4"
+            />
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight group-hover:opacity-80 transition-opacity">
+              Welcome to BibleYes
+            </h1>
+          </Link>
           <p className="text-sm text-gray-400 dark:text-[#888] mt-2 text-center leading-relaxed">
             Read a verse. Understand it. Live it. Pray it.
           </p>
